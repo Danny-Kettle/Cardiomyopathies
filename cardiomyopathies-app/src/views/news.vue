@@ -1,24 +1,60 @@
-
 <template>
-
+  <div>
+    <h1>News Results</h1>
+    <ul>
+      <li v-for="article in articles" :key="article._id">
+        <h2>{{ article.title }}</h2>
+        <p>{{ article.summary }}</p>
+        <a :href="article.link">Read More</a>
+      </li>
+    </ul>
+  </div>
 </template>
-<script >
+
+<script>
 import axios from 'axios';
 
-var options = {
-  method: 'GET',
-  url: 'https://api.newscatcherapi.com/v2/search',
-  params: {q: 'Cardiomyopathy', lang: 'en', sort_by: 'relevancy', page: '1'},
-  headers: {
-    'x-api-key': 'AObhnnaGOQZUl6IhHGPiw9K--GvlqQTk4_uXJ1P6cdo'
+export default {
+  data() {
+    return {
+      articles: []
+    }
+  },
+  mounted() {
+    axios.get('https://newsapi.org/v2/top-headlines', {
+      params: {
+        q: 'sports', 
+        apiKey: 'af79177a035f46cc90620c82d23fc10b'
+      }
+    })
+    .then(response => {
+      this.articles = response.data.articles
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
-};
+}
 
-axios.request(options).then(function (response) {
-    console.log(response.data.articles[0]);
-}).catch(function (error) {
-    console.error(error);
-});
 
-  </script>
+</script>
 
+<style scoped>
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+li {
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+p {
+  margin-bottom: 10px;
+}
+</style>
