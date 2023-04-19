@@ -3,7 +3,7 @@
     <h1>News Results</h1>
     <ul>
       <li v-for="article in articles" :key="article._id">
-        <h2>{{ article.source.Name }}</h2>
+        <h1>{{ article.source.Name }}</h1>
         <h2>{{ article.title }}</h2>
         <p>{{ article.summary }}</p>
 
@@ -45,6 +45,7 @@ export default {
 h1 {
   font-size: 24px;
   margin-bottom: 20px;
+  color:red;
 }
 
 
