@@ -3,7 +3,7 @@
     <h1>News Results</h1>
     <ul>
       <li v-for="article in articles" :key="article._id">
-        <h1>{{ article.source.Name }}</h1>
+        <h2>{{ article.source.Name }}</h2>
         <h2>{{ article.title }}</h2>
         <p>{{ article.summary }}</p>
 
@@ -19,11 +19,11 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      articles: []
+      articles: [],
+      imageUrls: []
     }
   },
   mounted() {
-        
     axios.get('https://newsapi.org/v2/everything', {
       params: {
         q: 'Cardiomyopathy disease', 
@@ -32,10 +32,33 @@ export default {
     })
     .then(response => {
       this.articles = response.data.articles
+      console.log(this.articles);
+
+      // Map each article to a relevant image from Unsplash
+      this.articles.forEach((article, index) => {
+        axios.get('https://api.unsplash.com/search/photos', {
+          params: {
+            query: article.title,
+            client_id: 'ckqFKuBCgY9FZbRISl0rd8xcUnGVnyRqgpoT6IuiZ2Y'
+          }
+        })
+        .then(response => {
+          const imageUrl = response.data.results[0].urls.regular;
+          this.imageUrls[index] = imageUrl;
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      });
     })
     .catch(error => {
       console.log(error)
     })
+  },
+  methods: {
+    redirectToArticle(url) {
+      window.open(url, '_blank')
+    }
   }
 }
 
@@ -45,7 +68,6 @@ export default {
 h1 {
   font-size: 24px;
   margin-bottom: 20px;
-  color:red;
 }
 
 
@@ -61,4 +83,3 @@ p {
   margin-bottom: 10px;
 }
 </style>
-
