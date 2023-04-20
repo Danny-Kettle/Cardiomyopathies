@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row min-h-screen w-full bg-gray-100">
-        <div id="sidebar" class="h-full fixed w-1/6 flex text-gray-600 gap-8 shadow-lg items-center py-40 font-bold text-2xl flex-col">
+        <div id="header" class="h-full fixed w-1/6 flex text-gray-600 gap-8 shadow-lg items-center py-40 font-bold text-2xl flex-col">
         <router-link to="/">
             <i class="fa fa-home mr-5"></i> Home
         </router-link>
@@ -16,6 +16,11 @@
         <div class="mt-auto">
             <router-link to="/login">
             <i class="fa fa-sign-in mr-5"></i> Login
+            </router-link>
+        </div>
+        <div class="mt-auto">
+            <router-link to="/register">
+            <i class="fa fa-sign-in mr-5"></i> Register
             </router-link>
         </div>
         </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full py-8">
+  <div class="h-full py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
         <div v-for="(article, index) in articles" :key="index" class="relative h-96 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-white  overflow-hidden" @click="redirectToArticle(article.url)">
