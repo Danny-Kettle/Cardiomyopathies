@@ -14,12 +14,15 @@ import {
   serverTimestamp,
   collection,
   onSnapshot,
+  DocumentReference,
   query,
   where,
   deleteDoc,
+  getDoc,
   getDocs,
   doc,
-  setDoc
+  setDoc,
+  limit
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -41,6 +44,7 @@ const timestamp = serverTimestamp()
 export {
   app,
   firebaseAuthentication,
+  getFirestore,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -50,11 +54,14 @@ export {
   timestamp,
   collection,
   onSnapshot,
+  DocumentReference,
   serverTimestamp,
   query,
   where,
   deleteDoc,
+  getDoc,
   getDocs,
   setDoc,
-  doc
+  doc,
+  limit
 }
