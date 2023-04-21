@@ -17,8 +17,10 @@ import {
   query,
   where,
   deleteDoc,
-  getDocs,
   doc,
+  limit,
+  getDocs,
+  getDoc,
   setDoc
 } from 'firebase/firestore'
 
@@ -32,8 +34,10 @@ const firebaseConfig = {
   measurementId: 'G-X03WBZWS2B'
 }
 
-const app = initializeApp(firebaseConfig)
-const analytics = getAnalytics(app)
+
+
+// Read database once ? 
+const app = initializeApp(firebaseConfig) 
 const firebaseAuthentication = getAuth()
 const firebaseFireStore = getFirestore()
 const timestamp = serverTimestamp()
@@ -45,16 +49,19 @@ export {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  getFirestore,
   updateProfile,
   firebaseFireStore,
   timestamp,
   collection,
   onSnapshot,
+  limit,
   serverTimestamp,
   query,
   where,
   deleteDoc,
   getDocs,
+  getDoc,
   setDoc,
   doc
 }

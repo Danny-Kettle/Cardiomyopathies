@@ -109,7 +109,6 @@
 <script>
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword , doc, firebaseAuthentication, firebaseFireStore , setDoc} from '../firebase/database'
 
-
 export default {
   data() {
     return {
@@ -123,6 +122,7 @@ export default {
     }
   },
   methods: {
+    // Put into Stores
     handleSubmit() {
       // handle form submission here
       if (this.isSignup) {
@@ -139,7 +139,7 @@ export default {
               firstName: this.firstName,
               lastName: this.lastName,
               institute: this.institute,
-              role: "user",
+              role: "user", // Doctor 
             }
             console.log("Firestore object:", firebaseFireStore);
             console.log("User data:", userData);
@@ -149,7 +149,7 @@ export default {
             // show success alert
             alert('Successfully signed up! You will now be redirected to the login page.')
             // redirect to login page
-            this.$router.push('/login')
+            this.isSignup = false;
           })
           .catch((error) => {
             const errorCode = error.code
@@ -164,10 +164,23 @@ export default {
         )
         // sign in user with email and password in Firestore
         signInWithEmailAndPassword(firebaseAuthentication, this.email, this.password)
-          .then(() => {
+          .then((userCredential) => {
             // show success alert
             alert('Successfully logged in!')
-            // redirect to dashboard page (replace with your desired page)
+
+            const user = userCredential.user
+
+            const userData = {
+              email: this.email,
+              username: this.username,
+              firstName: this.firstName,
+              lastName: this.lastName,
+              institute: this.institute,
+              role: "user",
+            }
+            // set session data
+            sessionStorage.setItem("user", JSON.stringify(userData))
+            
             this.$router.push('/')
           })
           .catch((error) => {
