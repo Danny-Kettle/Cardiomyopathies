@@ -107,7 +107,7 @@
     </div>
 </template>
 <script>
-import {signInWithEmailAndPassword, createUserWithEmailAndPassword , doc, firebaseAuthentication, firebaseFireStore , setDoc} from '../firebase/database'
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword, getFirestore , getDocs, collection, query, where, doc, firebaseAuthentication, firebaseFireStore , setDoc} from '../firebase/database'
 
 export default {
   data() {
@@ -160,36 +160,38 @@ export default {
           })
       } else {
         console.log(  
-          `Submitting login form with username: ${this.username} and password: ${this.password}`
+          `Submitting login form with username: ${this.email} and password: ${this.password}`
         )
         // sign in user with email and password in Firestore
         signInWithEmailAndPassword(firebaseAuthentication, this.email, this.password)
-          .then((userCredential) => {
-            // show success alert
-            alert('Successfully logged in!')
-
-            const user = userCredential.user
-
+          .then(async (userCredential) => {
+            const db = firebaseFireStore;
+            const q = query(collection(db, "users"), where("email", "==", this.email));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+            const docSnapshot = querySnapshot.docs[0];
+            const docId = docSnapshot.id;
+            console.log(docId)
             const userData = {
               email: this.email,
-              username: this.username,
-              firstName: this.firstName,
-              lastName: this.lastName,
-              institute: this.institute,
+              username: docSnapshot.data().username,
+              firstName: docSnapshot.data().firstName,
+              lastName: docSnapshot.data().lastName,
+              institute: docSnapshot.data().institute,
               role: "user",
-            }
-            // set session data
-            sessionStorage.setItem("user", JSON.stringify(userData))
-            
-            this.$router.push('/')
-          })
-          .catch((error) => {
-            const errorCode = error.code
-            const errorMessage = error.message
-            console.log(`Login error: ${errorCode} - ${errorMessage}`)
-            // show error alert
-            alert(`Login error: ${errorCode} - ${errorMessage}`)
-          })
+            };
+              sessionStorage.setItem("user", JSON.stringify(userData));
+              this.$router.push('/');
+            };
+        })
+        .catch((error) => {
+          const errorCode = error.code
+          const errorMessage = error.message
+          console.log(`Login error: ${errorCode} - ${errorMessage}`)
+          // show error alert
+          alert(`Login error: ${errorCode} - ${errorMessage}`)
+        })
       }
     }
   }
