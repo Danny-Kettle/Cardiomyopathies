@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  sendPasswordResetEmail,
   updateProfile
 } from 'firebase/auth'
 import {
@@ -34,10 +35,8 @@ const firebaseConfig = {
   measurementId: 'G-X03WBZWS2B'
 }
 
-
-
-// Read database once ? 
-const app = initializeApp(firebaseConfig) 
+// Read database once ?
+const app = initializeApp(firebaseConfig)
 const firebaseAuthentication = getAuth()
 const firebaseFireStore = getFirestore()
 const timestamp = serverTimestamp()
@@ -56,6 +55,7 @@ export {
   collection,
   onSnapshot,
   limit,
+  sendPasswordResetEmail,
   serverTimestamp,
   query,
   where,

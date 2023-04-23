@@ -142,7 +142,6 @@ if (searchType.value === 'Singular') {
 
 <template>
   <main>
-    <h1>{{ email }}</h1>
     <h1>Search Type: {{ searchType }}</h1>
     <select id="searchType" v-model="searchType">
       <option value="Singular">Singular</option>
@@ -270,27 +269,5 @@ if (searchType.value === 'Singular') {
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      email: "",
-      username: "",
-      firstName: "",
-      lastName: "",
-      institute: "",
-      isSignup: false
-    };
-  },  
-  created() {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    if (user) {
-      this.email = user.email;
-      this.username = user.username;
-      this.firstName = user.firstName;
-      this.lastName = user.lastName;
-      this.institute = user.institute;
-    }
-  }
-};
 
 </script>

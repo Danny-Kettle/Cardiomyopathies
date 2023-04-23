@@ -22,6 +22,11 @@ const router = createRouter({
       path: '/news',
       name: 'news',
       component: () => import('../views/news.vue')
+    },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: () => import('../components/login/Reset.vue')
     }
   ]
 })
