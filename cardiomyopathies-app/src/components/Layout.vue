@@ -10,6 +10,9 @@
         <router-link to="/news">
             <i class="fa fa-newspaper mr-5"></i> News
         </router-link>
+        <router-link to="/HPO">
+            <i class="fa fa-newspaper mr-5"></i> HPO
+        </router-link>
         <router-link to="/settings">
             <i class="fa fa-cog mr-5"></i> Settings
         </router-link>

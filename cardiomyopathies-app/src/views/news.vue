@@ -1,7 +1,8 @@
 <template>
   <div class="h-full py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
+      <h1  class="text-center font-bold pb-20 text-5xl	">Current Cardiomyopathy News</h1>
+
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
         <div v-for="(article, index) in articles" :key="index" class="relative h-96 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-white  overflow-hidden" @click="redirectToArticle(article.url)">
           <img :src="imageUrls[index] ? imageUrls[index]:defaultImageUrl" alt="" class="absolute inset-0 h-full w-full object-cover"   />
@@ -26,7 +27,7 @@ export default {
     return {
       articles: [],
       imageUrls: [], 
-      defaultImageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd0sv8OPDcZ2UqgjmlnD3mFkWtHYU4rQYQkQ&usqp=CAU',
+      defaultImageUrl: 'src/assets/img/defaultimage.jpg',
       error: false
     }
   },
@@ -65,9 +66,11 @@ export default {
     redirectToArticle(url) {
       window.open(url, '_blank')
     }
-  }
+  },
+  
   
 }
+
 </script>
 
 <style scoped>

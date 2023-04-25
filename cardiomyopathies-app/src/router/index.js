@@ -27,6 +27,11 @@ const router = createRouter({
       path: '/reset-password',
       name: 'reset-password',
       component: () => import('../components/login/Reset.vue')
+    },
+    {
+      path: '/HPO',
+      name: 'HPO',
+      component: () => import('../views/HPO.vue')
     }
   ]
 })
