@@ -2,6 +2,7 @@
   <div class="h-full py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1  class="text-center font-bold pb-20 text-5xl	">HPO Diseases</h1>
+     
 
       <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
     <div class="relative">
@@ -10,23 +11,25 @@
         </div>
         <input type="text"  class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  v-model="searchTerm" @input="search" placeholder="Search" required>
     </div>
-      <ul class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-    <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600" v-for="(item,index) in hpo.diseases">{{ index+1 }}.{{ item.dbName }}</li>
- 
+    <ul class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+  <li class="w-full text-blue-600 px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600" v-for="(item,index) in hpo.diseases">DB: {{ item.db }} - DB NAME: {{ item.dbName }} - DB REF: {{ item.dbRef }} - DISEASE-ID: {{ item.diseaseId }}</li>
+  <li class="w-full text-blue-600 px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600" v-for="(item,index) in hpo.terms">TERM NAME: {{ item.name }} - TERM ID: {{ item.id }} - TERM CHILDREN COUNT: {{ item.childrenCount }} - DISEASE-ID: {{ item.ontologyId }}</li>
+  <li class="w-full text-blue-600 px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600" v-for="(item,index) in hpo.genes">GENE ID: {{ item.geneId }} - GENE SYMBOL: {{ item.geneSymbol }}</li>
 </ul>
+
 
 </div>
 </div>
-    
+
 
 </template>
 
 <script>
-import axios from 'axios';
+import axios, { all } from 'axios';
 export default {
   data() {
   return {
-    hpo: [],
+    hpo: { diseases: [], genes: [], terms: [] },
     imageUrls: [],
     error: false,
     searchTerm: '',

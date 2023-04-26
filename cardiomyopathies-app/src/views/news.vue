@@ -1,6 +1,5 @@
 <template>
   <div class="h-full py-8">
-    <h1  class="text-center font-bold pb-20 text-5xl	">Current Cardiomyopathy News</h1>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1  class="text-center font-bold pb-20 text-5xl	">Current Cardiomyopathy News</h1>
 
@@ -28,11 +27,7 @@ export default {
     return {
       articles: [],
       imageUrls: [], 
-<<<<<<< HEAD
-      defaultImageUrl: 'src/assets/img/defaultimage.jpg',
-=======
       defaultImageUrl: 'src/assets/img/defaultImage.jpg',
->>>>>>> 8008e86a6f78df5353b6e2a74c0b0bfa3a2d2b70
       error: false
     }
   },
