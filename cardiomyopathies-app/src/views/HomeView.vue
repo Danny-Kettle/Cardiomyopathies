@@ -1,154 +1,14 @@
-<script setup>
-import Chart from 'chart.js/auto'
-import { ref, watch } from 'vue'
-import { getFirestore, collection, getDocs, app, query, getDoc, limit } from '../firebase/database'
-
-
-const firestore = getFirestore(app)
-const searchType = ref('Singular')
-const mutationName = ref('MYBPC3')
-const selectedValues = ref([])
-const collectionRef = collection(firestore, 'experimental_data')
-const cardiomyopathyData = ref([])
-const averageData = ref({})
-let chartData = null
-if (searchType.value === 'Singular') {
-  // Get averages
-  watch(mutationName, () => {
-    cardiomyopathyData.value = []
-    getDocs(query(collectionRef, limit(5)))
-      .then(async (querySnapshot) => {
-        const sumData = {
-          ledv: 0,
-          redv: 0,
-          lvef: 0,
-          rvef: 0,
-          lvmass: 0,
-          rvmass: 0,
-          lsv: 0,
-          rsv: 0,
-          scar: 0,
-          gender: '',
-          age_at_mri: 0,
-          apical_hcm: '',
-          sudden_cardiac_death: '',
-          hypertension: '',
-          diabetes: '',
-          myectomy: ''
-        }
-        let dataLength = 0
-        const promises = []
-        querySnapshot.forEach((document) => {
-          const promise = (async () => {
-            const data = document.data()
-            const mutationsRef = data.mutations
-            const mutationsSnapshot = await getDoc(mutationsRef)
-            const mutationData = mutationsSnapshot.data()
-            data.mutations = mutationData
-            if (data.mutations && data.mutations[mutationName.value] === true) {
-              // Accumulate the sum of each field
-              sumData.ledv += data.ledv
-              sumData.redv += data.redv
-              sumData.lvef += data.lvef
-              sumData.rvef += data.rvef
-              sumData.lvmass += data.lvmass
-              sumData.lsv += data.lsv
-              sumData.rsv += data.rsv
-              dataLength++
-            }
-          })()
-          promises.push(promise)
-        })
-        Promise.all(promises).then(() => {
-          const avgData = {
-            ledv: sumData.ledv / dataLength,
-            redv: sumData.redv / dataLength,
-            lvef: sumData.lvef / dataLength,
-            rvef: sumData.rvef / dataLength,
-            lvmass: sumData.lvmass / dataLength,
-            lsv: sumData.lsv / dataLength,
-            rsv: sumData.rsv / dataLength,
-            scar: sumData.scar / dataLength,
-            gender: sumData.gender,
-            age_at_mri: sumData.age_at_mri / dataLength,
-            apical_hcm: sumData.apical_hcm,
-            sudden_cardiac_death: sumData.sudden_cardiac_death,
-            hypertension: sumData.hypertension,
-            diabetes: sumData.diabetes,
-            myectomy: sumData.myectomy
-          }
-          averageData.value = [avgData]
-          console.log(avgData.ledv)
-          if (chartData) {
-            chartData.destroy()
-          }
-          const canvas = document.getElementById('average-values-chart')
-          if (canvas) {
-            chartData = new Chart(canvas, {
-              type: 'bar',
-              data: {
-                labels: [
-                  'Left Ventricular End Diastolic Volume (ledv)',
-                  'Right Ventricular End Diastolic Volume (redv)',
-                  'Left Ventricular Ejection Fraction (lvef)',
-                  'Right Ventricular Ejection Fraction (rvef)',
-                  'Left Ventricular Mass (lvmass)',
-                  'Right Ventricular Mass (rvmass)',
-                  'Left Systolic Volume (lsv)',
-                  'Right Systolic Volume (rsv)'
-                ],
-                datasets: [
-                  {
-                    label: `Average Data for ${mutationName.value}`,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    data: [
-                      avgData.ledv,
-                      avgData.redv,
-                      avgData.lvef,
-                      avgData.rvef,
-                      avgData.lvmass,
-                      avgData.lsv,
-                      avgData.rsv
-                    ]
-                  }
-                ]
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    ticks: {
-                      stepSize: 25,
-                      suggestedMin: 0,
-                      suggestedMax: 200
-                    }
-                  }
-                }
-              }
-            })
-          }
-        })
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  })
-}
-</script>
-
 <template>
   <main>
     <h1>Search Type: {{ searchType }}</h1>
     <select id="searchType" v-model="searchType">
+      <option disabled value="">Please select a field</option>
+      <option value="Overview">Overview</option>
       <option value="Singular">Singular</option>
       <option value="Comparison">Comparison</option>
     </select>
 
-    <template v-if="searchType === 'Singular'">
+    <template v-if="searchType === 'Singular' && dataFetched">
       <h1>Mutation: {{ mutationName }}</h1>
       <select id="mutationName" v-model="mutationName">
         <option value="ACTC">ACTC</option>
@@ -163,111 +23,104 @@ if (searchType.value === 'Singular') {
       </select>
     </template>
 
-    <template v-if="searchType === 'Comparison'">
-      <h1>First Mutation: {{ firstMutation }}</h1>
-      <select id="firstMutation" v-model="firstMutation">
-        <option value="MYH7">MYH7</option>
-        <option value="MYBPC3">MYBPC3</option>
-      </select>
-
-      <h1>Second Mutation: {{ secondMutation }}</h1>
-      <select id="secondMutation" v-model="secondMutation">
-        <option value="MYH7">MYH7</option>
-        <option value="MYBPC3">MYBPC3</option>
-      </select>
-
-      <h1>Select the variables to compare: {{ selectedValues }}</h1>
-      <label for="ledv">LEDV</label>
-      <input
-        type="checkbox"
-        id="ledv"
-        name="selectedValues"
-        value="LEDV"
-        v-model="selectedValues"
-      />
-      <br />
-
-      <label for="redv">REDV</label>
-      <input
-        type="checkbox"
-        id="redv"
-        name="selectedValues"
-        value="REDV"
-        v-model="selectedValues"
-      />
-      <br />
-
-      <label for="lesv">LESV</label>
-      <input
-        type="checkbox"
-        id="lesv"
-        name="selectedValues"
-        value="LESV"
-        v-model="selectedValues"
-      />
-      <br />
-
-      <label for="resv">RESV</label>
-      <input
-        type="checkbox"
-        id="resv"
-        name="selectedValues"
-        value="RESV"
-        v-model="selectedValues"
-      />
-      <br />
-
-      <label for="lvef">LVEF</label>
-      <input
-        type="checkbox"
-        id="lvef"
-        name="selectedValues"
-        value="LVEF"
-        v-model="selectedValues"
-      />
-      <br />
-
-      <label for="rvef">RVEF</label>
-      <input
-        type="checkbox"
-        id="rvef"
-        name="selectedValues"
-        value="RVEF"
-        v-model="selectedValues"
-      />
-      <br />
-
-      <label for="lvmass">LVMass</label>
-      <input
-        type="checkbox"
-        id="lvmass"
-        name="selectedValues"
-        value="LVMass"
-        v-model="selectedValues"
-      />
-      <br />
-
-      <label for="rvmass">RVMass</label>
-      <input
-        type="checkbox"
-        id="rvmass"
-        name="selectedValues"
-        value="RVMass"
-        v-model="selectedValues"
-      />
+    <template v-if="searchType === 'Comparison' && dataFetched">
+      <div v-for="mutation in availableMutations" :key="mutation">
+        <input type="checkbox" :value="mutation" v-model="mutationArray" />
+        <label>{{ mutation }}</label>
+      </div>
     </template>
-    <div>
-      <canvas ref="chart"></canvas>
-      <div v-if="searchType === 'Singular'">
-        <div style="width: 800px; height: 300px"><canvas id="average-values-chart"></canvas></div>
-      </div>
-      <div v-if="searchType === 'Comparison'">
-        <div style="width: 800px; height: 300px"><canvas id="chart"></canvas></div>
-      </div>
-    </div>
+
+    <template v-if="searchType === 'Overview' && dataFetched">
+      <BarChart :data="chartData" :search-type="searchType" />
+      <StackedBarChart :data="chartData" :search-type="searchType" />
+      <ScatterPlot :data="chartData" :search-type="searchType" />
+      <h1>Patient Data</h1>
+      <PieChart :data="chartData" :search-type="searchType" />
+    </template>
+
+    <template v-if="searchType === 'Singular' && dataFetched">
+      <PieChart :data="chartData" :search-type="searchType" :mutation-name="mutationName" />
+      <StackedBarChart :data="chartData" :search-type="searchType" :mutation-name="mutationName" />
+      <ScatterPlot :data="chartData" :search-type="searchType" :mutation-name="mutationName" />
+    </template>
+
+    <template v-if="searchType === 'Comparison' && dataFetched">
+      <ScatterPlot :data="chartData" :search-type="searchType" :mutations="mutationArray" />
+      <BarChart :data="chartData" :search-type="searchType" :mutations="mutationArray" />
+    </template>
   </main>
 </template>
 
 <script>
+import { getFirestore, collection, query, app, limit, getDocs, getDoc } from '../firebase/database'
+import StackedBarChart from '../components/charts/StackedBarChart.vue'
+import BarChart from '../components/charts/BarChart.vue'
+import ScatterPlot from '../components/charts/ScatterPlot.vue'
+import PieChart from '../components/charts/PieChart.vue'
 
+export default {
+  components: {
+    BarChart,
+    StackedBarChart,
+    ScatterPlot,
+    PieChart
+  },
+  data() {
+    return {
+      searchType: '',
+      mutationName: 'ACTC',
+      mutationArray: [],
+      availableMutations: [
+        'ACTC',
+        'MYBPC3',
+        'MYH7',
+        'MYL2',
+        'TNNCI',
+        'TNNI3',
+        'TNNT2',
+        'TPM1',
+        'TTN'
+      ],
+      chartData: [],
+      dataFetched: false
+    }
+  },
+  created() {
+    if (!this.dataFetched) {
+      this.fetchChartData()
+      this.dataFetched = true
+    }
+  },
+  methods: {
+    async fetchChartData() {
+      const firestore = getFirestore(app)
+      const collectionRef = collection(firestore, 'experimental_data')
+
+      const querySnapshot = await getDocs(query(collectionRef, limit(25)))
+
+      const promises = querySnapshot.docs.map(async (doc) => {
+        const data = doc.data()
+        if (data.mutations) {
+          const mutationsRef = data.mutations
+          const mutationsSnapshot = await getDoc(mutationsRef)
+          const mutationData = mutationsSnapshot.data()
+          data.mutations = mutationData
+        }
+        if (data.patient) {
+          const patientsRef = data.patient
+          const patientsSnapshot = await getDoc(patientsRef)
+          const patientData = patientsSnapshot.data()
+
+          data.patient = patientData
+        }
+
+        return JSON.parse(JSON.stringify(data))
+      })
+
+      const results = await Promise.all(promises)
+      this.chartData = results
+      this.dataFetched = true
+    }
+  }
+}
 </script>
