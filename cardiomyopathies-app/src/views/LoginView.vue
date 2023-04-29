@@ -201,7 +201,7 @@ export default {
               firstName: docSnapshot.data().firstName,
               lastName: docSnapshot.data().lastName,
               institute: docSnapshot.data().institute,
-              role: "user",
+              role: docSnapshot.data().role,
             };
               sessionStorage.setItem("user", JSON.stringify(userData));
               eventBus.emit('user-changed');
