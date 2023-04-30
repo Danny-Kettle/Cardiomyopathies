@@ -1,4 +1,3 @@
-
 <template>
     <div class="h-full flex justify-center items-center">
       <div class="flex justify-center w-1/3 mb-8">
@@ -23,7 +22,7 @@
                   type="text"
                   name="username"
                   id="username"
-                  v-model="username"
+                  v-model="username"  
                   required
                 />
               </div>
@@ -74,6 +73,14 @@
                 />
               </div>
               <div class="mb-4" v-if="isSignup">
+                <label class="block mb-2 text-gray-800" for="role">Profession</label>
+                <select class="w-full p-2 border border-gray-400 rounded-md focus:outline-none focus:border-blue-400" name="role" id="role" v-model="role" required>
+                  <option value="" disabled selected>Select profession</option>
+                  <option value="doctor">Doctor</option>
+                  <option value="guest">Guest</option>
+                </select>
+              </div>
+              <div class="mb-4" v-if="isSignup && isDoctor">
                 <label class="block mb-2 text-gray-800" for="institute">Institute</label>
                 <input
                   class="w-full p-2 border border-gray-400 rounded-md focus:outline-none focus:border-blue-400"
@@ -84,7 +91,7 @@
                   required
                 />
               </div>
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between mb-4 items-center">
                 <button
                   class="px-4 py-2 text-white rounded-md bg-blue-500 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                   type="submit"
@@ -101,16 +108,23 @@
                   }}
                 </button>
               </div>
+              <div class="mb-4 flex justify-end" v-if="!isSignup">
+                <router-link to="/reset-password" class="text-blue-400">Forgot password?</router-link>
+              </div>
             </form>
           </div>
       </div>
     </div>
 </template>
 <script>
-import {signInWithEmailAndPassword, createUserWithEmailAndPassword , doc, firebaseAuthentication, firebaseFireStore , setDoc} from '../firebase/database'
-
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword , getDocs, collection, query, where, doc, firebaseAuthentication, firebaseFireStore , setDoc} from '../firebase/database'
+import { updateUserStatus } from '../stores/userModule';
+import {eventBus} from '../stores/eventBus';
 
 export default {
+  props: {
+    user: Object
+  },
   data() {
     return {
       email: '',
@@ -119,10 +133,18 @@ export default {
       confirmPassword: '',
       firstName: '',
       lastName: '',
-      isSignup: false
+      role: '',
+      isSignup: false,
+      isDoctor: false
+    }
+  },
+  watch: {
+    role() {
+      this.isDoctor = this.role === 'doctor';
     }
   },
   methods: {
+    // Put into Stores
     handleSubmit() {
       // handle form submission here
       if (this.isSignup) {
@@ -139,7 +161,7 @@ export default {
               firstName: this.firstName,
               lastName: this.lastName,
               institute: this.institute,
-              role: "user",
+              role: this.role == "Doctor" ? this.role.toLowerCase() : "user", 
             }
             console.log("Firestore object:", firebaseFireStore);
             console.log("User data:", userData);
@@ -149,7 +171,7 @@ export default {
             // show success alert
             alert('Successfully signed up! You will now be redirected to the login page.')
             // redirect to login page
-            this.$router.push('/login')
+            this.isSignup = false;
           })
           .catch((error) => {
             const errorCode = error.code
@@ -160,23 +182,40 @@ export default {
           })
       } else {
         console.log(  
-          `Submitting login form with username: ${this.username} and password: ${this.password}`
+          `Submitting login form with username: ${this.email} and password: ${this.password}`
         )
         // sign in user with email and password in Firestore
         signInWithEmailAndPassword(firebaseAuthentication, this.email, this.password)
-          .then(() => {
-            // show success alert
-            alert('Successfully logged in!')
-            // redirect to dashboard page (replace with your desired page)
-            this.$router.push('/')
-          })
-          .catch((error) => {
-            const errorCode = error.code
-            const errorMessage = error.message
-            console.log(`Login error: ${errorCode} - ${errorMessage}`)
-            // show error alert
-            alert(`Login error: ${errorCode} - ${errorMessage}`)
-          })
+          .then(async (userCredential) => {
+            const db = firebaseFireStore;
+            const q = query(collection(db, "users"), where("email", "==", this.email));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+            const docSnapshot = querySnapshot.docs[0];
+            const docId = docSnapshot.id;
+            console.log(docId)
+            const userData = {
+              email: this.email,
+              username: docSnapshot.data().username,
+              firstName: docSnapshot.data().firstName,
+              lastName: docSnapshot.data().lastName,
+              institute: docSnapshot.data().institute,
+              role: docSnapshot.data().role,
+            };
+              sessionStorage.setItem("user", JSON.stringify(userData));
+              eventBus.emit('user-changed');
+              // updateUserStatus(userData);
+              this.$router.push('/');
+            };
+        })
+        .catch((error) => {
+          const errorCode = error.code
+          const errorMessage = error.message
+          console.log(`Login error: ${errorCode} - ${errorMessage}`)
+          // show error alert
+          alert(`Login error: ${errorCode} - ${errorMessage}`)
+        })
       }
     }
   }
