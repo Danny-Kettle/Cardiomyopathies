@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import './base.css';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Style scrollbar in WebKit-based browsers */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ::-webkit-scrollbar-thumb {
+  background-color: #4B5563;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #E5E7EB;
+  border-radius: 4px;
+} */
