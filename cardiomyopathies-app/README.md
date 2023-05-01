@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # cardiomyopathies-app
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -56,8 +55,3 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
-=======
-# Cardiomyopathies
-MMU Group Project
-I have been added - ibrahim moughal
->>>>>>> 240de94c0e6c565436725ad6f83f9de9afd86419

@@ -14,29 +14,9 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue')
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('../views/Profile.vue')
-    },
-    {
       path: '/register',
       name: 'register',
       component: () => import('../views/RegisterView.vue')
-    },
-    {
-      path: '/news',
-      name: 'news',
-      component: () => import('../views/news.vue')
-    },
-    {
-      path: '/reset-password',
-      name: 'reset-password',
-      component: () => import('../components/login/Reset.vue')
-    },
-    {
-      path: '/HPO',
-      name: 'HPO',
-      component: () => import('../views/HPO.vue')
     }
   ]
 })
