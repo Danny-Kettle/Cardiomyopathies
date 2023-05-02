@@ -33,20 +33,34 @@
               </thead>
               <tbody class="divide-y divide-gray-200 text-xs" v-for="(item, index) in collectionData" :key="index" >
                   <tr :class="(index % 2 === 0) ? 'bg-gray-100' : 'bg-white'">
-                    <td class="px-4 py-2 border">{{ item.patient }}</td>
-                    <td class="px-4 py-2 border">{{ item.apicalHCM }}</td>
-                    <td class="px-4 py-2 border">{{ item.ledv }}</td>
-                    <td class="px-4 py-2 border">{{ item.lesv }}</td>
-                    <td class="px-4 py-2 border">{{ item.lsv }}</td>
-                    <td class="px-4 py-2 border">{{ item.lvef }}</td>
-                    <td class="px-4 py-2 border">{{ item.lvmass }}</td>
-                    <td class="px-4 py-2 border">{{ item.redv }}</td>
-                    <td class="px-4 py-2 border">{{ item.resv }}</td>
-                    <td class="px-4 py-2 border">{{ item.rsv }}</td>
-                    <td class="px-4 py-2 border">{{ item.rvef }}</td>
-                    <td class="px-4 py-2 border">{{ item.mutations }}</td>
-                    <td class="text-center border text-xl"><i class="fa-solid fa-pen-to-square text-orange-300"></i></td>
-                    <td class="text-center border text-xl"><i class="fa-solid fa-trash text-red-500"></i></td>
+                    <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">
+                    {{ item.patient }}
+                  </td>     
+                  <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.apicalHCM }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.ledv }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lesv }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lsv }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lvef }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lvmass }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.redv }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.resv }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.rsv }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.rvef }}</td>
+                      <td :contenteditable="isEditable(index)" 
+                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.mutations }}</td>
+                    <td @click="editContent(index)" class="text-center border text-xl"><i class="fa-solid fa-pen-to-square text-orange-300 cursor-pointer hover:text-orange-100"></i></td>
+                    <td @click="deleteRow(item.docId)" class="text-center border text-xl"><i class="fa-solid cursor-pointer hover:text-red-300 fa-trash text-red-500"></i></td>
                   </tr>
               </tbody>
             </table>
@@ -57,18 +71,34 @@
   
     
     <script>
-    import { firebaseFireStore, collection, query, getDocs, doc, getDoc } from "../../firebase/database";
+    import { firebaseFireStore, collection, query, getDocs, doc, deleteDoc, getDoc } from "../../firebase/database";
     
     export default {
       name: 'RecordsComponent',
-      data() {
+      data() {  
         return {
-          collectionData: []
+          collectionData: [],
         }
       }, methods: {
       closeModal() {
           this.$emit('close-table-modal');
-      }
+      },
+      deleteRow(id){
+        const docRef = doc(firebaseFireStore, "experimental_data", id);
+        deleteDoc(docRef);
+        console.log("Document successfully deleted!");  
+        // Remove the deleted record from collectionData
+        const index = this.collectionData.findIndex(record => record.docId === id);
+        if (index !== -1) {
+          this.collectionData.splice(index, 1);
+        }
+      },
+      editContent(index){
+        this.collectionData[index].editable = !this.collectionData[index].editable;
+      },
+      isEditable(index) {
+        return this.collectionData[index].editable;
+      },
     },
       async created() {
         const q = query(collection(firebaseFireStore, "experimental_data"));
@@ -88,7 +118,7 @@
             const mutationDoc = await getDoc(mutationRef);
             mutationId = mutationDoc.id;
           }
-          this.collectionData.push({ ...data, patient: patientId, mutations: mutationId });
+          this.collectionData.push({ ...data, patient: patientId, mutations: mutationId, docId: doc.id , editable: false});
         }
     
         console.log(this.collectionData);
