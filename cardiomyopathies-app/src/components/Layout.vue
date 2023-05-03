@@ -4,8 +4,11 @@
         <router-link to="/">
             <i class="fa fa-home mr-5"></i> Home
         </router-link>
-        <router-link to="/profile">
+        <router-link v-if="user.isLoggedIn" to="/profile">
             <i v-if="user.role !== 'doctor'" class="fa fa-user mr-5"></i><i v-else class="fas fa-user-doctor mr-5"></i> {{ user.isLoggedIn ? capitalizedFirstName : "Profile"}} 
+        </router-link>
+        <router-link v-if="!user.isLoggedIn" to="/login">
+            <i v-if="user.role !== 'doctor'" class="fa fa-user mr-5"></i>{{ user.isLoggedIn ? capitalizedFirstName : "Profile"}} 
         </router-link>
         <router-link to="/news">
             <i class="fa fa-newspaper mr-5"></i> News

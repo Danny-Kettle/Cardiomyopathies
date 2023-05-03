@@ -1,6 +1,6 @@
   <!-- Expand patient
     Expand Mutation
-    Make dropdown for patient selection dynamic 
+    Make dropdown for  patient selection dynamic 
     Add Mutation part to creating a record 
 
   -->
@@ -33,33 +33,35 @@
               </thead>
               <tbody class="divide-y divide-gray-200 text-xs" v-for="(item, index) in collectionData" :key="index" >
                   <tr :class="(index % 2 === 0) ? 'bg-gray-100' : 'bg-white'">
-                    <td :contenteditable="isEditable(index)" 
+                    <td @input="item.patient = $event.target.innerText" :contenteditable="isEditable(index)" 
                       :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">
-                    {{ item.patient }}
-                  </td>     
-                  <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.apicalHCM }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.ledv }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lesv }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lsv }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lvef }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lvmass }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.redv }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.resv }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.rsv }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.rvef }}</td>
-                      <td :contenteditable="isEditable(index)" 
-                      :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.mutations }}</td>
-                    <td @click="editContent(index)" class="text-center border text-xl"><i class="fa-solid fa-pen-to-square text-orange-300 cursor-pointer hover:text-orange-100"></i></td>
+                    {{ item.patientName }}
+                    </td>     
+                    <td @input="item.patient = $event.target.innerText" :contenteditable="isEditable(index)" :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.apicalHCM }}</td>
+                    <td @input="item.ledv = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.ledv }}</td>
+                    <td @input="item.lesv = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lesv }}</td>
+                    <td @input="item.lsv = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lsv }}</td>
+                    <td @input="item.lvef = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lvef }}</td>
+                    <td @input="item.lvmass = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.lvmass }}</td>
+                    <td @input="item.redv = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.redv }}</td>
+                    <td  @input="item.resv = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.resv }}</td>
+                    <td @input="item.rsv = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.rsv }}</td>
+                    <td  @input="item.rvef = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.rvef }}</td>
+                    <td @input="item.mutations = $event.target.innerText" :contenteditable="isEditable(index)" 
+                    :class="['px-4', 'py-2', isEditable(index) ? 'border-orange-300 border-2' : '']">{{ item.mutations }}</td>
+                    <td @click="isEditable(index) ? saveContent(index, item.docId) : editContent(index)" class="text-center border text-xl">
+                      <i v-if="isEditable(index)" class="fas fa-save text-emerald-600 cursor-pointer hover:text-emerald-500"></i>
+                      <i v-else class="fa-solid fa-pen-to-square text-orange-300 cursor-pointer hover:text-orange-100"></i>
+                    </td>
                     <td @click="deleteRow(item.docId)" class="text-center border text-xl"><i class="fa-solid cursor-pointer hover:text-red-300 fa-trash text-red-500"></i></td>
                   </tr>
               </tbody>
@@ -71,7 +73,7 @@
   
     
     <script>
-    import { firebaseFireStore, collection, query, getDocs, doc, deleteDoc, getDoc, where } from "../../firebase/database";
+    import { firebaseFireStore, collection, query, getDocs, doc, deleteDoc, getDoc, where, setDoc } from "../../firebase/database";
 
 
     export default {
@@ -100,6 +102,46 @@
       isEditable(index) {
         return this.collectionData[index].editable;
       },
+      saveContent(index, docId){
+
+        const uid = this.$cookies.get('uid')
+        const userRef = doc(collection(firebaseFireStore, 'users'), uid);
+        const patientRef = doc(collection(firebaseFireStore, 'patients'), this.collectionData[index].patient);
+        const mutationRef = doc(collection(firebaseFireStore, 'mutations'), this.collectionData[index].mutations);
+
+        console.log(docId);
+
+        const docRef = doc(collection(firebaseFireStore, 'experimental_data'), docId);
+
+
+        const updatedData = {
+        patient: patientRef,
+        mutations: mutationRef,
+        apicalHCM: Boolean(this.collectionData[index].apicalHCM),
+        ledv: Number(this.collectionData[index].ledv),
+        lesv: Number(this.collectionData[index].lesv),
+        lsv: Number(this.collectionData[index].lsv),
+        lvef: Number(this.collectionData[index].lvef),
+        lvmass: Number(this.collectionData[index].lvmass),
+        redv: Number(this.collectionData[index].redv),
+        resv: Number(this.collectionData[index].resv),
+        rsv: Number(this.collectionData[index].rsv),
+        rvef: Number(this.collectionData[index].rvef),
+        user: userRef,
+        };
+
+        console.log(updatedData);
+
+        setDoc(docRef, updatedData)
+        .then(() => {
+          this.closeModal();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+
+
     },
       async created() {
         const uid = this.$cookies.get('uid')
@@ -114,29 +156,28 @@
           collectionRef,
           where('user', '==', userRef)
         );
-
-        // const q = query(
-        //   collectionRef,
-        //   where('user', '==', `/users/${uid}`)
-        // );       
-
+     
         const querySnapshot = await getDocs(q);
         
         for (const doc of querySnapshot.docs) {
           let data = doc.data();
           let patientRef = data.patient;
-          let mutationRef = data.mutations;
+          let mutationRef = data.mutation;
           let mutationId = "NULL";
           let patientId = "NULL";
+          let patientName = "NULL";
+          
           if (patientRef) {
             const patientDoc = await getDoc(patientRef);
             patientId = patientDoc.id;
+            patientName = patientDoc.data().name;
+            console.log(patientName);
           }
           if (mutationRef) {
             const mutationDoc = await getDoc(mutationRef);
             mutationId = mutationDoc.id;
           }
-          this.collectionData.push({ ...data, patient: patientId, mutations: mutationId, docId: doc.id , editable: false});
+          this.collectionData.push({ ...data, patient: patientId, mutations: mutationId, docId: doc.id , editable: false, patientName: patientName});
         }
     
         console.log(this.collectionData);

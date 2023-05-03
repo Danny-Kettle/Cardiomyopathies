@@ -11,7 +11,7 @@
                         <label for="patient" class="text-slate-600 font-bold mb-1 block">Patient :</label>
                         <select v-model="patient" class="block w-full mt-1 rounded-md border p-2 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:ring-opacity-50">
                             <option value="" disabled selected>Select Patient</option>
-                            <option v-for="(item, index) in patientList" :key="index" :value="item" selected>{{item}}</option>
+                            <option v-for="(item, index) in patientList" :key="index" :value="item.id" selected>{{item.name}}</option>
                         </select>
                     </div>
                     <div class="mb-4 w-1/4">
@@ -68,7 +68,7 @@
                 
                 <div class="flex h-fit my-auto flex-row w-full gap-5 justify-start">
                     <label for="apicalHCM" class="text-slate-600 font-bold">Apical HCM:</label>
-                    <input type="checkbox" id="apicalHCM" v-model.number="apicalHCM" required class="rounded">
+                    <input type="checkbox" id="apicalHCM" v-model.number="apicalHCM" class="rounded">
                 </div>
 
                 <div class="text-right w-full">
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import {query, collection, firebaseFireStore, doc, getDocs, addDoc, limit} from '../../firebase/database'
+import {query, collection, firebaseFireStore, where, doc, getDocs, addDoc, limit} from '../../firebase/database'
 import { ref } from 'vue'
 import { updateUserStatus } from '../../stores/utils' 
 
@@ -94,7 +94,7 @@ const user = ref(updateUserStatus())
         return {
         patient: '',
         mutation: '',
-        apicalHCM: null,
+        apicalHCM: false,
         ledv: null,
         lesv: null,
         lsv: null,
@@ -104,7 +104,7 @@ const user = ref(updateUserStatus())
         resv: null,
         rsv: null,
         rvef: null,
-        patientList: [],
+        patientList: [{ name: '', id: '' }],
         mutationsList: [],
         }
     },
@@ -151,22 +151,26 @@ const user = ref(updateUserStatus())
     },
 
     async created(){
-        const db = firebaseFireStore;
-        const collectionRef = collection(db, 'patients')
+        
         const uid = this.$cookies.get('uid')
+        
         const userRef = doc(collection(firebaseFireStore, 'users'), uid);
+        let collectionRef = collection(firebaseFireStore, 'patients');
 
-        let querySnapshot = await getDocs(collectionRef, limit(25));
+        const q = query(collectionRef, where('user', '==', userRef));
+
+        let querySnapshot = await getDocs(q);
+
         let ids = [];
 
-
-
         querySnapshot.forEach((doc) => {
-            ids.push(doc.name ? doc.name : doc.id);
+            const name = doc.data().name ? doc.data().name : doc.id;
+            const id = doc.id;
+            ids.push({ name, id });
         });
         this.patientList = ids;
         
-        collectionRef = collection(db, 'mutations')
+        collectionRef = collection(firebaseFireStore, 'mutations')
         querySnapshot = await getDocs(collectionRef, limit(25));
         ids = [];
         querySnapshot.forEach((doc) => {

@@ -27,7 +27,7 @@
           </div>
           <div class="mb-4 w-full">
             <div class="">
-              <input type="checkbox" id="scar" v-model="scar" required class="text-slate-600 mr-2 font-bold mb-1 inline-block">
+              <input type="checkbox" id="scar" v-model="scar" class="text-slate-600 mr-2 font-bold mb-1 inline-block">
               <label for="scar" class="text-slate-600 font-bold">Scar:</label>
             </div>
             <div class="">
@@ -58,7 +58,7 @@
 </template>
   
 <script>
-import { getFirestore, app, collection, addDoc, doc } from '../../firebase/database'
+import { getFirestore, firebaseFireStore, app, collection, addDoc, doc } from '../../firebase/database'
 
 export default {
   name: 'AddPatientComponent',
@@ -72,7 +72,7 @@ export default {
       hypertension: false,
       diabetes: false,
       myectomy: false,
-      scar: ''
+      scar: false,
     }
   },
   mounted() {
@@ -80,10 +80,12 @@ export default {
   },
   methods: {
     async submitForm() {
-      // do something with the form data, e.g. make an API call to save the patient data
+
+      const uid = this.$cookies.get('uid')
+
       const firestore = getFirestore(app)
       const patientsCollection = collection(firestore, 'patients')
-      const usersCollection = collection(firestore, 'users')
+      const userRef = doc(collection(firebaseFireStore, 'users'), uid);
 
       try {
         await addDoc(patientsCollection, {
@@ -96,18 +98,9 @@ export default {
           diabetes: this.diabetes,
           myectomy: this.myectomy,
           scar: this.scar,
+          user: userRef
         })
 
-        this.name = ''
-        this.age = null
-        this.ageAtMRI = null
-        this.gender = 'true'
-        this.suddenCardiacDeath = false
-        this.hypertension = false
-        this.diabetes = false
-        this.myectomy = false
-        this.scar = ''
-        this.userId = '0000001'
 
         this.closeModal()
       } catch (error) {

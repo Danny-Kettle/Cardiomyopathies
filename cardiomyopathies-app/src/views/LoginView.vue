@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex justify-center items-center">
-      <div class="flex justify-center w-1/3 mb-8">
+      <div class="flex justify-center w-1/2 mb-8">
           <div class="bg-white shadow-md w-full rounded px-24 py-16">
             <h2 class="text-2xl font-semibold mb-4">{{ isSignup ? 'Create Account' : 'Login' }}</h2>
             <form @submit.prevent="handleSubmit">
