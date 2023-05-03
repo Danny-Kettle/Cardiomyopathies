@@ -25,11 +25,11 @@
               <option value="false">Female</option>
             </select>
           </div>
-          <div class="mb-4">
-            <label for="scar" class="text-slate-600 font-bold block">Scar:</label>
-            <input type="text" id="scar" v-model="scar" required class="w-full shadow border rounded py-2 px-3">
-          </div>
           <div class="mb-4 w-full">
+            <div class="">
+              <input type="checkbox" id="scar" v-model="scar" required class="text-slate-600 mr-2 font-bold mb-1 inline-block">
+              <label for="scar" class="text-slate-600 font-bold">Scar:</label>
+            </div>
             <div class="">
               <input type="checkbox" id="sudden_cardiac_death" v-model="suddenCardiacDeath" class="mr-2">
               <label for="sudden_cardiac_death" class="text-slate-600 font-bold mb-1 inline-block">Sudden Cardiac Death:</label>
@@ -57,30 +57,67 @@
    </div>
 </template>
   
-  <script>
-  export default {
-    name: 'AddPatientComponent',
-    data() {
-      return {
-        name: '',
-        age: null,
-        ageAtMRI: null,
-        gender: true,
-        suddenCardiacDeath: false,
-        hypertension: false,
-        diabetes: false,
-        myectomy: false,
-        scar: '',
+<script>
+import { getFirestore, app, collection, addDoc, doc } from '../../firebase/database'
+
+export default {
+  name: 'AddPatientComponent',
+  data() {
+    return {
+      name: '',
+      age: null,
+      ageAtMRI: null,
+      gender: true,
+      suddenCardiacDeath: false,
+      hypertension: false,
+      diabetes: false,
+      myectomy: false,
+      scar: ''
+    }
+  },
+  mounted() {
+    console.log('Current User:', this.currentUser)
+  },
+  methods: {
+    async submitForm() {
+      // do something with the form data, e.g. make an API call to save the patient data
+      const firestore = getFirestore(app)
+      const patientsCollection = collection(firestore, 'patients')
+      const usersCollection = collection(firestore, 'users')
+
+      try {
+        await addDoc(patientsCollection, {
+          name: this.name,
+          age: this.age,
+          ageAtMRI: this.ageAtMRI,
+          gender: this.gender === 'true',
+          suddenCardiacDeath: this.suddenCardiacDeath,
+          hypertension: this.hypertension,
+          diabetes: this.diabetes,
+          myectomy: this.myectomy,
+          scar: this.scar,
+        })
+
+        this.name = ''
+        this.age = null
+        this.ageAtMRI = null
+        this.gender = 'true'
+        this.suddenCardiacDeath = false
+        this.hypertension = false
+        this.diabetes = false
+        this.myectomy = false
+        this.scar = ''
+        this.userId = '0000001'
+
+        this.closeModal()
+      } catch (error) {
+        console.error('Error adding patient: ', error)
       }
     },
-    methods: {
-      submitForm() {
-        // do something with the form data, e.g. make an API call to save the patient data
-      },
-      closeModal() {
-          this.$emit('close-patient-modal');
-      }
+    closeModal() {
+      this.$emit('close-patient-modal')
     }
   }
-  </script>
-    
+}
+</script>
+

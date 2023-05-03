@@ -7,6 +7,7 @@ export const updateUserStatus = () => {
       username: user.username,
       lastName: user.lastName,
       institute: user.institute,
+      id: user.id,
       role: user.role
     }
   } else {
@@ -16,6 +17,7 @@ export const updateUserStatus = () => {
       username: '',
       lastName: '',
       institute: '',
+      id: '',
       role: ''
     }
   }

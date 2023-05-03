@@ -8,17 +8,17 @@
                 <h1 class="text-2xl text-slate-600 uppercase font-bold mb-6 w-full">Add Record</h1>
                 <div class="flex flex-row w-full gap-5">
                     <div class="mb-4 w-1/4">
-                        <label for="name" class="text-slate-600 font-bold mb-1 block">Patient :</label>
+                        <label for="patient" class="text-slate-600 font-bold mb-1 block">Patient :</label>
                         <select v-model="patient" class="block w-full mt-1 rounded-md border p-2 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:ring-opacity-50">
                             <option value="" disabled selected>Select Patient</option>
-                            <option v-for="(item, index) in patientList" :key="index" value={{ item }} disabled selected>{{item}}</option>
+                            <option v-for="(item, index) in patientList" :key="index" :value="item" selected>{{item}}</option>
                         </select>
                     </div>
                     <div class="mb-4 w-1/4">
-                        <label for="name" class="text-slate-600 font-bold mb-1 block">Mutation :</label>
-                        <select v-model="patient" class="block w-full mt-1 rounded-md border p-2 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:ring-opacity-50">
+                        <label for="mutation" class="text-slate-600 font-bold mb-1 block">Mutation :</label>
+                        <select v-model="mutation" class="block w-full mt-1 rounded-md border p-2 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 focus:ring-opacity-50">
                             <option value="" disabled selected>Select Mutation</option>
-                            <option v-for="(item, index) in mutationsList" :key="index" value={{ item }} disabled selected>{{item}}</option>
+                            <option v-for="(item, index) in mutationsList" :key="index" :value="item" selected>{{item}}</option>
                         </select>
                     </div>
                 </div>
@@ -81,13 +81,19 @@
 </template>
 
 <script>
-import {query, collection, firebaseFireStore, getDocs} from '../../firebase/database'
+import {query, collection, firebaseFireStore, doc, getDocs, addDoc, limit} from '../../firebase/database'
+import { ref } from 'vue'
+import { updateUserStatus } from '../../stores/utils' 
+
+const user = ref(updateUserStatus())
+
     export default {
     name: 'AddRecordComponent',
     props: ['isRecordModal'],
     data() {
         return {
         patient: '',
+        mutation: '',
         apicalHCM: null,
         ledv: null,
         lesv: null,
@@ -104,24 +110,64 @@ import {query, collection, firebaseFireStore, getDocs} from '../../firebase/data
     },
     methods: {
         submitForm() {
-        // do something with the form data, e.g. make an API call to save the patient data
+            const uid = this.$cookies.get('uid')
+            const userRef = doc(collection(firebaseFireStore, 'users'), uid);
+            const patientRef = doc(collection(firebaseFireStore, 'patients'), this.patient);
+            const mutationRef = doc(collection(firebaseFireStore, 'mutations'), this.mutation);
+
+            const record = {
+            patient: patientRef,    
+            mutation: mutationRef,
+            ledv: this.ledv,
+            lesv: this.lesv,
+            lsv: this.lsv,
+            lvef: this.lvef,
+            lvmass: this.lvmass,
+            redv: this.redv,
+            resv: this.resv,
+            rsv: this.rsv,
+            rvef: this.rvef,
+            apicalHCM: this.apicalHCM,
+            user:  userRef,
+        };
+
+        console.log(record);
+
+        const collectionRef = collection(firebaseFireStore, 'experimental_data')
+
+
+        addDoc(collectionRef, record)
+        .then(() => {
+          this.closeModal();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        
         },
         closeModal() {
           this.$emit('close-record-modal');
         }
     },
+
     async created(){
         const db = firebaseFireStore;
-        let q = query(collection(db, "patients"));
-        let querySnapshot = await getDocs(q);
+        const collectionRef = collection(db, 'patients')
+        const uid = this.$cookies.get('uid')
+        const userRef = doc(collection(firebaseFireStore, 'users'), uid);
+
+        let querySnapshot = await getDocs(collectionRef, limit(25));
         let ids = [];
+
+
+
         querySnapshot.forEach((doc) => {
-            ids.push(doc.id);
+            ids.push(doc.name ? doc.name : doc.id);
         });
         this.patientList = ids;
         
-        q = query(collection(db, "mutations"));
-        querySnapshot = await getDocs(q);
+        collectionRef = collection(db, 'mutations')
+        querySnapshot = await getDocs(collectionRef, limit(25));
         ids = [];
         querySnapshot.forEach((doc) => {
             ids.push(doc.id);

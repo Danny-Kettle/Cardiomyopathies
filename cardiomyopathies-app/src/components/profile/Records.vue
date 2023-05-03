@@ -71,8 +71,9 @@
   
     
     <script>
-    import { firebaseFireStore, collection, query, getDocs, doc, deleteDoc, getDoc } from "../../firebase/database";
-    
+    import { firebaseFireStore, collection, query, getDocs, doc, deleteDoc, getDoc, where } from "../../firebase/database";
+
+
     export default {
       name: 'RecordsComponent',
       data() {  
@@ -101,13 +102,30 @@
       },
     },
       async created() {
-        const q = query(collection(firebaseFireStore, "experimental_data"));
+        const uid = this.$cookies.get('uid')
+
+        const userRef = doc(collection(firebaseFireStore, 'users'), uid);
+        const collectionRef = collection(firebaseFireStore, 'experimental_data')
+
+
+        console.log(userRef);
+
+        const q = query(
+          collectionRef,
+          where('user', '==', userRef)
+        );
+
+        // const q = query(
+        //   collectionRef,
+        //   where('user', '==', `/users/${uid}`)
+        // );       
+
         const querySnapshot = await getDocs(q);
-    
+        
         for (const doc of querySnapshot.docs) {
-          const data = doc.data();
-          const patientRef = data.patient;
-          const mutationRef = data.mutations;
+          let data = doc.data();
+          let patientRef = data.patient;
+          let mutationRef = data.mutations;
           let mutationId = "NULL";
           let patientId = "NULL";
           if (patientRef) {

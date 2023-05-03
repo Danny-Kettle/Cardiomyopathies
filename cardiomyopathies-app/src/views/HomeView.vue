@@ -110,7 +110,6 @@ export default {
           const patientsRef = data.patient
           const patientsSnapshot = await getDoc(patientsRef)
           const patientData = patientsSnapshot.data()
-
           data.patient = patientData
         }
 

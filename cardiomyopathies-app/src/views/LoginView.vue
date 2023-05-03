@@ -118,8 +118,11 @@
 </template>
 <script>
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword , getDocs, collection, query, where, doc, firebaseAuthentication, firebaseFireStore , setDoc} from '../firebase/database'
-import { updateUserStatus } from '../stores/userModule';
 import {eventBus} from '../stores/eventBus';
+
+
+//Add this in the higher level component for global use 
+
 
 export default {
   props: {
@@ -190,11 +193,12 @@ export default {
             const db = firebaseFireStore;
             const q = query(collection(db, "users"), where("email", "==", this.email));
             const querySnapshot = await getDocs(q);
+
+            //Make ID use a token to prevent showing the uid to the user 
             
             if (!querySnapshot.empty) {
             const docSnapshot = querySnapshot.docs[0];
             const docId = docSnapshot.id;
-            console.log(docId)
             const userData = {
               email: this.email,
               username: docSnapshot.data().username,
@@ -203,9 +207,10 @@ export default {
               institute: docSnapshot.data().institute,
               role: docSnapshot.data().role,
             };
+              // document.cookie = `uid=${{docId}}; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/`;
+              this.$cookies.set('uid', docId, { expires: 0 })
               sessionStorage.setItem("user", JSON.stringify(userData));
               eventBus.emit('user-changed');
-              // updateUserStatus(userData);
               this.$router.push('/');
             };
         })
