@@ -1,8 +1,8 @@
 <template>
-    <div class="h-full flex justify-center items-center">
-      <div class="flex justify-center w-1/2 mb-8">
-          <div class="bg-white shadow-md w-full rounded px-24 py-16">
-            <h2 class="text-2xl font-semibold mb-4">{{ isSignup ? 'Create Account' : 'Login' }}</h2>
+    <div class="flex justify-center items-center">
+      <div class="flex justify-center w-11/12 lg:w-1/2 my-8">
+          <div class="bg-white shadow-md w-full rounded px-12 lg:px-24 py-16">
+            <h2 class="text-xl md:text-2xl font-semibold mb-4">{{ isSignup ? 'Create Account' : 'Login' }}</h2>
             <form @submit.prevent="handleSubmit">
               <div class="mb-4">
                 <label class="block mb-2 text-gray-800" for="email">Email</label>
@@ -91,14 +91,14 @@
                   required
                 />
               </div>
-              <div class="flex justify-between mb-4 items-center">
+              <div class="flex flex-col gap-6 lg:flex-row justify-between mb-4 items-start lg:items-center">
                 <button
                   class="px-4 py-2 text-white rounded-md bg-blue-500 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                   type="submit"
                 >
                   {{ isSignup ? 'Sign Up' : 'Log In' }}
                 </button>
-                <button
+                <button     
                   class="text-blue-500 hover:text-blue-600 focus:outline-none"
                   type="button"
                   @click="isSignup = !isSignup"
@@ -108,8 +108,8 @@
                   }}
                 </button>
               </div>
-              <div class="mb-4 flex justify-end" v-if="!isSignup">
-                <router-link to="/reset-password" class="text-blue-400">Forgot password?</router-link>
+              <div class="flex justify-start lg:justify-end" v-if="!isSignup">
+                <router-link to="/reset-password" class="text-blue-600">Forgot password?</router-link>
               </div>
             </form>
           </div>

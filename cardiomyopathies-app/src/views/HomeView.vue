@@ -93,6 +93,7 @@ export default {
   },
   methods: {
     async fetchChartData() {
+      console.log("fetched");
       const firestore = getFirestore(app)
       const collectionRef = collection(firestore, 'experimental_data')
 

@@ -58,7 +58,7 @@
 </template>
   
 <script>
-import { getFirestore, firebaseFireStore, app, collection, addDoc, doc } from '../../firebase/database'
+import { getFirestore, firebaseFireStore, app, collection, getDocs, setDoc, doc } from '../../firebase/database'
 
 export default {
   name: 'AddPatientComponent',
@@ -80,32 +80,37 @@ export default {
   },
   methods: {
     async submitForm() {
+    const uid = this.$cookies.get('uid')
+    const firestore = getFirestore(app)
+    const patientsCollection = collection(firestore, 'patients')
+    const userRef = doc(collection(firebaseFireStore, 'users'), uid)
 
-      const uid = this.$cookies.get('uid')
+    try {
+      // Get the size of the patients collection
+      const patientsSnapshot = await getDocs(patientsCollection)
+      const patientCount = patientsSnapshot.size
+      
+      // Create a custom document reference using the patient count as it is zero indexed
+      const patientRef = doc(patientsCollection, `${patientCount}`)
+      
+      // Add a new document with the custom reference
+      await setDoc(patientRef, {
+        name: this.name,
+        age: this.age,
+        ageAtMRI: this.ageAtMRI,
+        gender: this.gender === 'true',
+        suddenCardiacDeath: this.suddenCardiacDeath,
+        hypertension: this.hypertension,
+        diabetes: this.diabetes,
+        myectomy: this.myectomy,
+        scar: this.scar,
+        user: userRef
+      })
 
-      const firestore = getFirestore(app)
-      const patientsCollection = collection(firestore, 'patients')
-      const userRef = doc(collection(firebaseFireStore, 'users'), uid);
-
-      try {
-        await addDoc(patientsCollection, {
-          name: this.name,
-          age: this.age,
-          ageAtMRI: this.ageAtMRI,
-          gender: this.gender === 'true',
-          suddenCardiacDeath: this.suddenCardiacDeath,
-          hypertension: this.hypertension,
-          diabetes: this.diabetes,
-          myectomy: this.myectomy,
-          scar: this.scar,
-          user: userRef
-        })
-
-
-        this.closeModal()
-      } catch (error) {
-        console.error('Error adding patient: ', error)
-      }
+      this.closeModal()
+    } catch (error) {
+      console.error('Error adding patient: ', error)
+    }
     },
     closeModal() {
       this.$emit('close-patient-modal')

@@ -1,10 +1,10 @@
 <template>
-  <div class="h-full py-8">
-    <h1 class="ml-10 text-slate-600 font-bold pb-12 text-5xl">Database Search</h1>
-    <div class="flex flex-col gap-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-row gap-10">
-    <div class="relative w-1/2">
-        <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+  <div class="min-h-full  flex flex-col py-8">
+    <div class="flex flex-col gap-10 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-row w-full gap-10">
+        <div class="relative w-full lg:w-3/4 mx-auto">
+        <h1 class="text-slate-600 font-bold pb-6 lg:pb-12 text-xl lg:text-5xl">Database Search</h1>
+        <label for="default-search" class="mb-2 text-xs lg:text-sm font-medium text-gray-900 sr-only">Search</label>
         <div class="relative">
           <input type="text" class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" v-model="searchTerm" @input="search" placeholder="Search" required>
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -25,7 +25,8 @@
           </li>
         </ul>
       </div>
-        <div v-if="geneDetails.gene.geneId || diseaseDetails.disease.diseaseName || hpoDetails.details.name" class="w-1/2 h-fit bg-white px-10 py-12 rounded-lg">
+      </div>
+      <div v-if="geneDetails.gene.geneId || diseaseDetails.disease.diseaseName || hpoDetails.details.name" class="w-full lg:w-3/4 h-fit bg-white px-10 py-12 rounded-lg">
           <div v-if="hpoDetails.details.name" class="flex flex-col gap-5">
             <h2 class="text-2xl font-bold tracking-wide text-gray-900">{{ hpoDetails.details.name }} <span class="text-sm font-thin italic">{{ hpoDetails.details.id }}</span></h2>
             <hr class=""/>
@@ -59,8 +60,7 @@
             </div>
           </div>
         </div>
-      </div>
-      <div v-if="!geneDetails.gene.geneId && !diseaseDetails.disease.diseaseName && !hpoDetails.details.name" class="w-1/2 h-fit bg-white px-10 py-12 rounded-lg">
+      <div v-if="!geneDetails.gene.geneId && !diseaseDetails.disease.diseaseName && !hpoDetails.details.name" class="w-full lg:w-3/4 h-fit bg-white px-10 py-12 rounded-lg">
         <div class="animate-pulse flex flex-col gap-8" >
           <div class=" w-1/2 h-3 bg-gray-400 block"></div>
           <hr/>
@@ -123,6 +123,8 @@ methods: {
       .then((response) => {
         this.diseaseDetails= {disease:[], catTermsMap:[], geneAssoc:[]};
         this.geneDetails = {gene:[], termAssoc:[]};
+        this.hpo = { diseases: [], genes: [], terms: [] };
+
         this.hpoDetails = response.data;
         console.log(this.hpoDetails);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -140,6 +142,8 @@ methods: {
         console.log(response.data);
         this.hpoDetails = {details:[]},
         this.geneDetails = {gene:[], termAssoc:[]};
+        this.hpo = { diseases: [], genes: [], terms: [] };
+
         this.diseaseDetails = response.data;
         window.scrollTo({ top: 0, behavior: 'smooth' });
       })
@@ -154,6 +158,7 @@ methods: {
       .get(`https://hpo.jax.org/api/hpo/gene/${id}`)
       .then((response) => {
         console.log(response.data);
+        this.hpo = { diseases: [], genes: [], terms: [] };
         this.hpoDetails = {details:[]},
         this.diseaseDetails= {disease:[], catTermsMap:[], geneAssoc:[]};
         this.geneDetails = response.data;
