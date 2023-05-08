@@ -1,7 +1,7 @@
 <template>
     <div class="overflow flex flex-row min-h-screen w-full bg-gray-100">
-        <div id="sidebar" class="h-full z-5 fixed lg:flex w-1/2 lg:w-1/6 bg-gray-100 text-gray-600 gap-8 shadow-lg items-center py-40 font-bold text-lg flex-col" :class="sidebarClasses"  >
-          <i v-if="sidebarOpen" @click="toggleSidebar" class="z-20 absolute left-8 top-8 fa-solid fa-xmark"></i>
+        <div id="sidebar" class="absolute h-full z-5 fixed lg:flex w-1/2 lg:w-1/6 bg-gray-100 text-gray-600 gap-8 shadow-lg items-center py-40 font-bold text-lg flex-col" :class="sidebarClasses"  >
+          <i v-if="sidebarOpen" @click="toggleSidebar" class=" z-20 absolute left-8 top-8 fa-solid fa-xmark"></i>
           <router-link to="/">
               <i class="fa fa-home mr-5"></i> Home
           </router-link>

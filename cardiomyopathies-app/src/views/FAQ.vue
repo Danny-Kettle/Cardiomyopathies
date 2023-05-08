@@ -1,8 +1,8 @@
 <template>
-  <section class="relative py-20 overflow-hidden bg-gray">
+  <section class=" py-20 overflow-hidden bg-gray">
   <img class="absolute top-0 left-0 mt-44" src="saturn-assets/images/faq/light-blue-left.png" alt="">
   <img class="absolute top-0 right-0 mt-10" src="saturn-assets/images/faq/star-right.svg" alt="">
-  <div class="relative container px-4 mx-auto">
+  <div class=" container px-4 mx-auto">
     <div class="max-w-5xl mx-auto">
       <div class="text-center mb-24">
         <span class="inline-block py-1 px-3 mb-4 text-xs font-semibold text-orange-900 bg-orange-50 rounded-full">FREQUENTLY ASK QUESTION</span>
