@@ -14,6 +14,9 @@
           <router-link to="/news">
               <i class="fa fa-newspaper mr-5"></i> News
           </router-link>
+          <router-link to="/faq">
+              <i class="fa-solid fa-book-open mr-5"></i> FAQ
+          </router-link>
           <router-link to="/HPO">
               <i class="fa-solid fa-book-open mr-5"></i> HPO
           </router-link>
