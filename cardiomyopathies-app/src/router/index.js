@@ -37,6 +37,11 @@ const router = createRouter({
       path: '/HPO',
       name: 'HPO',
       component: () => import('../views/HPO.vue')
+    },
+    {
+      path: '/FAQ',
+      name: 'FAQ',
+      component: () => import('../views/FAQ.vue')
     }
   ]
 })

@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-row min-h-screen w-full bg-gray-100">
-        <div id="sidebar" class="h-full z-40 fixed lg:flex w-1/2 lg:w-1/6 bg-gray-100 text-gray-600 gap-8 shadow-lg items-center py-40 font-bold text-lg flex-col" :class="sidebarClasses"  >
-          <i v-if="sidebarOpen" @click="toggleSidebar" class="z-50 absolute left-8 top-8 fa-solid fa-xmark"></i>
+    <div class="overflow flex flex-row min-h-screen w-full bg-gray-100">
+        <div id="sidebar" class="h-full z-5 fixed lg:flex w-1/2 lg:w-1/6 bg-gray-100 text-gray-600 gap-8 shadow-lg items-center py-40 font-bold text-lg flex-col" :class="sidebarClasses"  >
+          <i v-if="sidebarOpen" @click="toggleSidebar" class="z-20 absolute left-8 top-8 fa-solid fa-xmark"></i>
           <router-link to="/">
               <i class="fa fa-home mr-5"></i> Home
           </router-link>
@@ -13,6 +13,9 @@
           </router-link>
           <router-link to="/news">
               <i class="fa fa-newspaper mr-5"></i> News
+          </router-link>
+          <router-link to="/FAQ">
+              <i class="fa-solid fa-book-open mr-5"></i> FAQ
           </router-link>
           <router-link to="/HPO">
               <i class="fa-solid fa-book-open mr-5"></i> HPO
@@ -27,6 +30,7 @@
               <i class="fa fa-sign-in mr-5"></i> Logout
               </router-link>
           </div>
+          
         </div>
         <main class="flex-1 overflow-x-hidden ml-1/4">
           <header class="w-full h-32 lg:mb-10 py-4 flex justify-content shadow-md lg:shadow-none">

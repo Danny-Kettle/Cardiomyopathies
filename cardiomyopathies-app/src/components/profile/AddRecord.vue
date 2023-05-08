@@ -1,8 +1,8 @@
 <template>
     <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-10"></div>
-    <div class="fixed z-10 inset-0 overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen">
-            <div class="bg-white relative flex justify-center items-center my-20 flex-col rounded-lg shadow-lg px-14 py-20 w-5/6">
+    <div class="fixed z-10 w-full inset-0 overflow-y-auto">
+        <div class=" flex items-center w-30 justify-center min-h-screen">
+            <div class="bg-white relative flex justify-center items-center my-20 flex-col rounded-lg shadow-lg px-14 py-20 w-29">
             <i  @click="closeModal" class="fa-solid fa-xmark absolute top-10 right-10 text-slate-600 text-2xl cursor-pointer"></i>
             <form @submit.prevent="submitForm" class="flex flex-col gap-3 flex-wrap w-full">
                 <h1 class="text-2xl text-slate-600 uppercase font-bold mb-6 w-full">Add Record</h1>
