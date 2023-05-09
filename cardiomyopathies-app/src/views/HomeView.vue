@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { getFirestore, collection, query, app, limit, getDocs, getDoc } from '../firebase/database'
+import { getFirestore, collection, query, app, getDocs, getDoc } from '../firebase/database'
 import StackedBarChart from '../components/charts/StackedBarChart.vue'
 import BarChart from '../components/charts/BarChart.vue'
 import ScatterPlot from '../components/charts/ScatterPlot.vue'
@@ -67,7 +67,7 @@ export default {
   },
   data() {
     return {
-      searchType: '',
+      searchType: 'Overview',
       mutationName: 'ACTC',
       mutationArray: [],
       availableMutations: [
@@ -85,33 +85,27 @@ export default {
       dataFetched: false
     }
   },
-  created() {
+  async created() {
     if (!this.dataFetched) {
-      this.fetchChartData()
+      await this.fetchChartData()
       this.dataFetched = true
     }
   },
   methods: {
     async fetchChartData() {
-      console.log("fetched");
       const firestore = getFirestore(app)
-      const collectionRef = collection(firestore, 'experimental_data')
+      const collectionRef = collection(firestore, 'experimental_data_mutations')
 
-      const querySnapshot = await getDocs(query(collectionRef, limit(25)))
+      const querySnapshot = await getDocs(query(collectionRef))
 
       const promises = querySnapshot.docs.map(async (doc) => {
         const data = doc.data()
-        if (data.mutations) {
-          const mutationsRef = data.mutations
-          const mutationsSnapshot = await getDoc(mutationsRef)
-          const mutationData = mutationsSnapshot.data()
-          data.mutations = mutationData
-        }
-        if (data.patient) {
-          const patientsRef = data.patient
+        if (data.row_num) {
+          const patientsRef = data.row_num
           const patientsSnapshot = await getDoc(patientsRef)
           const patientData = patientsSnapshot.data()
-          data.patient = patientData
+
+          data.row_num = patientData
         }
 
         return JSON.parse(JSON.stringify(data))
