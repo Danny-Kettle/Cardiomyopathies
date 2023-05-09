@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       selectedField: 'lvmass',
+      chartInstance: null,
       comparisonChartInstance: null
     }
   },
@@ -48,6 +49,9 @@ export default {
     },
     mutations: {
       type: Array
+    },
+    apicalHcmFilter: {
+      type: Boolean
     }
   },
   mounted() {
