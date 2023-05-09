@@ -6,12 +6,12 @@
   -->
 
   <template>
-    <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-10">
-      <i @click="closeModal" class="fa-solid fa-xmark absolute z-10 top-10 right-10 text-white text-2xl cursor-pointer"></i>
+    <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50">
+      <i @click="closeModal" class="fa-solid fa-xmark absolute z-50 top-10 right-10 text-white text-2xl cursor-pointer"></i>
     </div>
-    <div class="fixed z-10 overflow-x-hidden inset-0 my-20">
-      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div class="shadow overflow-hidden border-b border-gray-200">
+    <div class="fixed h-fit z-50 overflow-scroll inset-0 my-20">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <div class="shadow border-b border-gray-200">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="sticky top-0 bg-slate-600">
                 <tr>

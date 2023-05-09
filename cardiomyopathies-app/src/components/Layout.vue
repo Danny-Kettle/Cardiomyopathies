@@ -31,7 +31,7 @@
               </router-link>
           </div>
         </div>
-        <main class="flex-1 overflow-x-hidden ml-1/4">
+        <main class="flex-1 overflow-y-hidden ml-1/4">
           <header class="w-full h-32 lg:mb-10 py-4 flex justify-content shadow-md lg:shadow-none">
             <div  @click="toggleSidebar" class="absolute lg:hidden left-10 top-12">
               <i class="fa-solid fa-bars text-slate-600 text-2xl"></i>

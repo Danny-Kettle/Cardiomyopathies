@@ -31,7 +31,8 @@
               >
               <input v-model="userData.lastName" class="px-3 py-1 shadow-sm rounded" />
             </div>
-            <div class="flex flex-row text-xs md:text-sm items-center">
+            
+            <div v-if="user.role === 'doctor'"  class="flex flex-row text-xs md:text-sm items-center">
               <label class="font-bold w-28 tracking-wider uppercase text-slate-600"
                 >institute</label
               >
@@ -62,7 +63,7 @@
               I am a doctor
             </p>
           </div>
-          <div class="flex flex-col">
+          <div v-if="user.role === 'doctor'" class="flex flex-col">
             <div class="flex flex-col w-full justify-between">
               <h2 class="font-bold text-xl text-slate-600 uppercase mb-4">Records</h2>
               <div class="flex flex-row flex-wrap gap-2 lg:gap-8">
@@ -70,7 +71,13 @@
                   @click="isTableModal = !isTableModal"
                   class="flex text-xs flex-row gap-4 py-4 px-4 bg-orange-400 rounded text-white justify-center items-center uppercase shadow font-bold transform duration-300 origin-center ease-in-out hover:scale-110"
                 >
-                  <span class="w-28 flex justify-between items-center"><i class="fa-solid fa-expand"></i> View Table</span>
+                  <span class="w-28 flex justify-between items-center"><i class="fa-solid fa-expand"></i> View Records</span>
+                </button>
+                <button
+                  @click="isPatientTableModal = !isPatientTableModal"
+                  class="flex text-xs flex-row gap-4 py-4 px-4 bg-indigo-400 rounded text-white justify-center items-center uppercase shadow font-bold transform duration-300 origin-center ease-in-out hover:scale-110"
+                >
+                  <span class="w-28 flex justify-between items-center"><i class="fa-solid fa-expand"></i> View Patients</span>
                 </button>
                 <button
                   @click="isRecordModal = !isRecordModal"
@@ -87,6 +94,7 @@
               </div>
             </div>
             <RecordsComponent v-if="isTableModal" @close-table-modal="isTableModal = !isTableModal" />
+            <PatientsComponent v-if="isPatientTableModal" @close-patientTable-modal="isPatientTableModal = !isPatientTableModal" />
             <AddPatientComponent
               v-if="isPatientModal"
               @close-patient-modal="isPatientModal = !isPatientModal"
@@ -119,11 +127,13 @@ import {
 import RecordsComponent from '@/components/profile/Records.vue'
 import AddPatientComponent from '@/components/profile/AddPatient.vue'
 import AddRecordComponent from '@/components/profile/AddRecord.vue'
+import PatientsComponent from '@/components/profile/Patients.vue'
 
 export default {
   name: 'Profile',
   components: {
     RecordsComponent,
+    PatientsComponent,
     AddPatientComponent,
     AddRecordComponent,
   },
@@ -138,6 +148,7 @@ export default {
         institute: ''
       },
       isPatientModal: false,
+      isPatientTableModal: false,
       isRecordModal: false,
       isTableModal: false,
     }

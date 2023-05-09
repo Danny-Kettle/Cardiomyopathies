@@ -1,6 +1,6 @@
 <template>
-    <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-10"></div>
-    <div class="fixed z-10 inset-0 overflow-y-auto">
+    <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50"></div>
+    <div class="fixed z-50 inset-0 overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen">
             <div class="bg-white relative flex justify-center items-center my-20 flex-col rounded-lg shadow-lg px-14 py-20 w-5/6">
             <i  @click="closeModal" class="fa-solid fa-xmark absolute top-10 right-10 text-slate-600 text-2xl cursor-pointer"></i>
@@ -15,7 +15,7 @@
                         </select>
                     </div>
                 </div>
-                <h2 class="text-slate-600 font-bold  mb-1 block">Mutations :</h2>
+                <h2 class="text-slate-600 font-bold mb-1 block">Mutations :</h2>
                 <div class="flex flex-row flex-wrap gap-8 mb-8 text-sm">
                     <div class="flex h-fit my-auto  flex-row gap-2 text-center justify-center">
                         <label for="actc" class="text-slate-600 font-bold">ACTC:</label>

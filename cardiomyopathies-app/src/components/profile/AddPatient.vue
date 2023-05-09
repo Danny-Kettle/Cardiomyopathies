@@ -1,10 +1,10 @@
 <template>
-<div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-10"></div>
-  <div class="fixed z-10 inset-0 overflow-y-auto">
+<div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50"></div>
+  <div class="fixed z-50 inset-0 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen">
-      <div class="bg-white my-20 relative flex justify-center items-center flex-col rounded-lg shadow-lg py-20 px-20 w-5/6">
+      <div class="bg-white my-20 relative flex justify-center items-center flex-col rounded-lg shadow-lg py-20 px-20 w-11/12">
         <i @click="closeModal" class="fa-solid fa-xmark absolute top-10 right-10 text-slate-600 text-2xl cursor-pointer"></i>
-        <form @submit.prevent="submitForm" class="flex flex-row flex-wrap gap-6 w-full">
+        <form @submit.prevent="submitForm" class="flex flex-row overflow-auto flex-wrap gap-6 w-full">
           <h1 class="text-3xl text-slate-600 uppercase font-bold mb-6 w-full">Add Patient</h1>
           <div class="mb-4">
             <label for="name" class="text-slate-600 font-bold block">Name:</label>
@@ -97,9 +97,9 @@ export default {
       await setDoc(patientRef, {
         name: this.name,
         age: this.age,
-        ageAtMRI: this.ageAtMRI,
+        age_at_mri: this.ageAtMRI,
         gender: this.gender === 'true',
-        suddenCardiacDeath: this.suddenCardiacDeath,
+        sudden_cardiac_death: this.suddenCardiacDeath,
         hypertension: this.hypertension,
         diabetes: this.diabetes,
         myectomy: this.myectomy,

@@ -136,6 +136,7 @@ export default {
       confirmPassword: '',
       firstName: '',
       lastName: '',
+      institute: '',
       role: '',
       isSignup: false,
       isDoctor: false
