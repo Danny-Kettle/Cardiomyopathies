@@ -40,8 +40,7 @@ export default {
       selectedCategory: 'age'
     }
   },
-  async mounted() {
-    await this.$nextTick()
+  mounted() {
     const ctx = this.$refs['mutations-patient-count']?.getContext('2d')
     const ctx2 = this.$refs['mutations-patient-data']?.getContext('2d')
 
@@ -69,6 +68,7 @@ export default {
       }
 
       const ctx2 = this.$refs['mutations-patient-data'].getContext('2d')
+
       this.mutationDataChart = this.createStackedBarChart(
         ctx2,
         this.getMutationDistributionData(this.data, this.selectedCategory),
@@ -105,6 +105,7 @@ export default {
           ]
         },
         options: {
+          animation: false,
           plugins: {
             title: {
               display: true,
@@ -132,6 +133,7 @@ export default {
           datasets: chartData.datasets
         },
         options: {
+          animation: false,
           plugins: {
             title: {
               display: true,
@@ -158,13 +160,22 @@ export default {
       }
 
       data.forEach((datum) => {
-        if (datum.mutations && datum.patient && typeof datum.patient.gender === 'boolean') {
-          for (const mutation in datum.mutations) {
-            if (
-              datum.mutations.hasOwnProperty.call(datum.mutations, mutation) &&
-              datum.mutations[mutation]
-            ) {
-              const gender = datum.patient.gender ? 'female' : 'male'
+        const mutationFields = [
+          'actc',
+          'mybpc3',
+          'myh7',
+          'myl2',
+          'tnnci',
+          'tnni3',
+          'tnnt2',
+          'tpm1',
+          'ttn'
+        ]
+
+        if (datum.row_num && typeof datum.row_num.female === 'boolean') {
+          for (const mutation of mutationFields) {
+            if (datum[mutation]) {
+              const gender = datum.row_num.female ? 'female' : 'male'
               if (mutationsByGender[gender][mutation]) {
                 mutationsByGender[gender][mutation] += 1
               } else {
@@ -207,11 +218,10 @@ export default {
 
         data.forEach((datum) => {
           if (
-            datum.patient &&
-            datum.patient.age_at_mri >= minAge &&
-            datum.patient.age_at_mri <= maxAge &&
-            datum.mutations &&
-            datum.mutations[this.mutationName]
+            datum.row_num &&
+            datum.row_num.age_at_mri >= minAge &&
+            datum.row_num.age_at_mri <= maxAge &&
+            datum[this.mutationName.toLowerCase()]
           ) {
             count += 1
           }
@@ -240,10 +250,9 @@ export default {
 
         data.forEach((datum) => {
           if (
-            datum.patient &&
-            datum.patient.gender === isFemale &&
-            datum.mutations &&
-            datum.mutations[this.mutationName]
+            datum.row_num &&
+            datum.row_num.female === isFemale &&
+            datum[this.mutationName.toLowerCase()]
           ) {
             count += 1
           }

@@ -10,7 +10,7 @@
       <label for="field-select">Select field:</label>
       <select id="field-select" v-model="selectedField">
         <option disabled value="">Please select a field</option>
-        <option value="lvmass">LV Mass</option>
+        <option value="lvmass" selected>LV Mass</option>
         <option value="rvef">RVEF</option>
         <option value="rsv">RSV</option>
         <option value="lesv">LESV</option>
@@ -33,7 +33,7 @@ import Chart from 'chart.js/auto'
 export default {
   data() {
     return {
-      selectedField: '',
+      selectedField: 'lvmass',
       comparisonChartInstance: null
     }
   },
@@ -89,6 +89,7 @@ export default {
           ]
         },
         options: {
+          animation: false,
           scales: {
             y: {
               beginAtZero: true,
@@ -103,26 +104,44 @@ export default {
       })
     },
     createHorizontalChart(ctx, chartData, chartLabel) {
+      const backgroundColors = [
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(201, 203, 207, 0.2)'
+      ]
+
+      const borderColors = backgroundColors.map((color) => color.replace('0.2', '1'))
+      const borderColorsByLabel = chartData.labels.map(
+        (_, index) => borderColors[index % borderColors.length]
+      )
+
       return new Chart(ctx, {
         type: 'bar',
         data: {
           labels: chartData.labels,
           datasets: [
             {
-              label: 'Average',
               data: chartData.values,
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: backgroundColors,
+              borderColor: borderColorsByLabel,
               borderWidth: 1
             }
           ]
         },
         options: {
+          animation: false,
           indexAxis: 'y',
           plugins: {
             title: {
               display: true,
               text: chartLabel
+            },
+            legend: {
+              display: false
             }
           },
           responsive: true,
@@ -157,14 +176,12 @@ export default {
       const mutationSums = {}
 
       data.forEach((datum) => {
-        if (datum.mutations) {
-          mutations.forEach((mutation) => {
-            if (datum.mutations[mutation]) {
-              mutationCounts[mutation] = (mutationCounts[mutation] || 0) + 1
-              mutationSums[mutation] = (mutationSums[mutation] || 0) + datum[field]
-            }
-          })
-        }
+        mutations.forEach((mutation) => {
+          if (datum[mutation.toLowerCase()]) {
+            mutationCounts[mutation] = (mutationCounts[mutation] || 0) + 1
+            mutationSums[mutation] = (mutationSums[mutation] || 0) + datum[field]
+          }
+        })
       })
 
       const avgValues = mutations.map((mutation) => {
@@ -183,22 +200,28 @@ export default {
         'No Mutation': 0
       }
 
+      const mutationFields = [
+        'actc',
+        'mybpc3',
+        'myh7',
+        'myl2',
+        'tnnci',
+        'tnni3',
+        'tnnt2',
+        'tpm1',
+        'ttn'
+      ]
+
       data.forEach((datum) => {
-        if (datum.mutations) {
-          let hasMutation = false
-          for (const mutation in datum.mutations) {
-            if (
-              Object.prototype.hasOwnProperty.call(datum.mutations, mutation) &&
-              datum.mutations[mutation]
-            ) {
-              mutationCounts[mutation] = mutationCounts[mutation] ? mutationCounts[mutation] + 1 : 1
-              hasMutation = true
-            }
+        let hasMutation = false
+        mutationFields.forEach((mutation) => {
+          if (datum[mutation]) {
+            mutationCounts[mutation] = (mutationCounts[mutation] || 0) + 1
+            hasMutation = true
           }
-          if (!hasMutation) {
-            mutationCounts['No Mutation']++
-          }
-        } else {
+        })
+
+        if (!hasMutation) {
           mutationCounts['No Mutation']++
         }
       })

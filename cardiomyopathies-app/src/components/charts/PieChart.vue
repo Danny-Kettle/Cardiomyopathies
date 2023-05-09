@@ -31,9 +31,7 @@ export default {
       mutationScarChart: null
     }
   },
-  async mounted() {
-    await this.$nextTick()
-
+  mounted() {
     const ctx = this.$refs['scar-count']?.getContext('2d')
     const mutationScarCtx = this.$refs['mutation-scar-count']?.getContext('2d')
 
@@ -83,6 +81,7 @@ export default {
           ]
         },
         options: {
+          animation: false,
           plugins: {
             title: {
               display: true,
@@ -99,8 +98,8 @@ export default {
       let withoutScar = 0
 
       data.forEach((datum) => {
-        if (datum.patient && typeof datum.patient.scar === 'boolean') {
-          if (datum.patient.scar) {
+        if (datum.row_num && typeof datum.row_num.scar === 'boolean') {
+          if (datum.row_num.scar) {
             withScar += 1
           } else {
             withoutScar += 1
@@ -114,17 +113,29 @@ export default {
       let withScar = 0
       let withoutScar = 0
 
+      const mutationFields = [
+        'actc',
+        'mybpc3',
+        'myh7',
+        'myl2',
+        'tnnci',
+        'tnni3',
+        'tnnt2',
+        'tpm1',
+        'ttn'
+      ]
+
       data.forEach((datum) => {
-        if (
-          datum.patient &&
-          typeof datum.patient.scar === 'boolean' &&
-          datum.mutations &&
-          datum.mutations[this.mutationName]
-        ) {
-          if (datum.patient.scar) {
-            withScar += 1
-          } else {
-            withoutScar += 1
+        if (datum.row_num && typeof datum.row_num.scar === 'boolean') {
+          if (
+            mutationFields.includes(this.mutationName.toLowerCase()) &&
+            datum[this.mutationName.toLowerCase()]
+          ) {
+            if (datum.row_num.scar) {
+              withScar += 1
+            } else {
+              withoutScar += 1
+            }
           }
         }
       })
