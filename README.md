@@ -15,7 +15,7 @@ We have built this project using the following technologies and tools:
 - **Deployment**: Firebase Hosting
 
 ## Installation
-1. Clone the repository: `git clone https://github.com/your-username/cardiomyopathy-app.git`
+1. Clone the repository: `git clone https://github.com/Danny-Kettle/cardiomyopathy-app.git`
 2. Install the required dependencies: `npm install`
 
 ## Usage
