@@ -2,32 +2,35 @@
     <div class="flex flex-row min-h-screen w-full bg-gray-100">
         <div id="sidebar" class="h-full z-40 fixed lg:flex w-1/2 lg:w-1/6 bg-gray-100 text-gray-600 gap-8 shadow-lg items-center py-40 font-bold text-lg flex-col" :class="sidebarClasses"  >
           <i v-if="sidebarOpen" @click="toggleSidebar" class="z-50 absolute left-8 top-8 fa-solid fa-xmark"></i>
-          <router-link to="/">
-              <i class="fa fa-home mr-5"></i> Home
+          <router-link class="flex flex-row" to="/">
+              <i class="fa fa-home my-auto w-12"></i> <span class="w-12">Home</span>
           </router-link>
-          <router-link v-if="user.isLoggedIn" to="/profile">
-              <i v-if="user.role !== 'doctor'" class="fa fa-user mr-5"></i><i v-else class="fas fa-user-doctor mr-5"></i> {{ user.isLoggedIn ? capitalizedFirstName : "Profile"}} 
+          <router-link class="flex flex-row" to="/charts">
+            <i class="fa-solid fa-chart-simple my-auto w-12"></i> <span class="w-12">Charts</span>
           </router-link>
-          <router-link v-if="!user.isLoggedIn" to="/login">
-              <i v-if="user.role !== 'doctor'" class="fa fa-user mr-5"></i>{{ user.isLoggedIn ? capitalizedFirstName : "Profile"}} 
+          <router-link class="flex flex-row" v-if="user.isLoggedIn" to="/profile">
+              <i v-if="user.role !== 'doctor'" class="fa fa-user my-auto w-12"></i><i v-else class="fas fa-user-doctor my-auto w-12"></i> <span class="w-12">{{ user.isLoggedIn ? capitalizedFirstName : 'Profile'}}</span> 
           </router-link>
-          <router-link to="/news">
-              <i class="fa fa-newspaper mr-5"></i> News
+          <router-link class="flex flex-row" v-if="!user.isLoggedIn" to="/login">
+              <i v-if="user.role !== 'doctor'" class="fa fa-user my-auto w-12"></i><span class="w-12">{{ user.isLoggedIn ? capitalizedFirstName : "Profile"}}</span> 
           </router-link>
-          <router-link to="/faq">
-              <i class="fa-solid fa-book-open mr-5"></i> FAQ
+          <router-link class="flex flex-row" to="/news">
+              <i class="fa fa-newspaper w-12 my-auto "></i> <span class="w-12">News</span>
           </router-link>
-          <router-link to="/HPO">
-              <i class="fa-solid fa-book-open mr-5"></i> HPO
+          <router-link class="flex flex-row" to="/faq">
+            <i class="fa-solid fa-circle-info my-auto w-12"></i> <span class="w-12">FAQ</span>
+          </router-link>
+          <router-link class="flex flex-row" to="/HPO">
+              <i class="fa-solid fa-book-open w-12 my-auto"></i> <span class="w-12">HPO</span>
           </router-link>
           <div v-if="!user.isLoggedIn" class="mt-auto">
-              <router-link to="/login">
-              <i class="fa fa-sign-in mr-5"></i> Login
+              <router-link class="flex flex-row" to="/login">
+              <i class="fa fa-sign-in w-12 my-auto"></i> <span class="w-12">Login</span>
               </router-link>
           </div>
           <div v-if="user.isLoggedIn" class="mt-auto" @click="logout">
-              <router-link to="/login">
-              <i class="fa fa-sign-in mr-5"></i> Logout
+              <router-link class="flex flex-row" to="/login">
+              <i class="fa fa-sign-in w-12 my-auto"></i> <span class="w-12">Logout</span>
               </router-link>
           </div>
         </div>

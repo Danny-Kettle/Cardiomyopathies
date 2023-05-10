@@ -1,7 +1,10 @@
 <template>
   <div class="min-h-screen mx-auto">
     <div class="h-full w-11/12 flex flex-col mx-auto py-8">
-      <h1  class="font-bold pb-20 text-2xl lg:text-6xl text-slate-600">Latest News</h1>
+      <div class="pb-20 flex flex-col gap-4 lg:gap-6">
+        <h1  class="font-bold text-3xl lg:text-4xl text-slate-600">Latest News</h1>
+        <p class="italic text-lg lg:text-xl text-slate-600 max-w-screen-lg">Stay up to date on the latest developments in cardiomyopathy research and treatment. Our team of experts curates the most important news and insights from trusted sources to keep you informed.</p>
+      </div>
       <div class="">
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
           <div v-for="(article, index) in articles" :key="index" class="relative h-96 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-white overflow-hidden" @click="redirectToArticle(article.url)">

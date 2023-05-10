@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendEmailVerification,
   signOut,
   sendPasswordResetEmail,
   updateProfile
@@ -25,6 +26,7 @@ import {
   getDoc,
   setDoc
 } from 'firebase/firestore'
+
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDtHDqAiZSBSSe5S5U4FLQxcoStC6jW8FI',
@@ -51,6 +53,7 @@ export {
   signOut,
   getFirestore,
   updateProfile,
+  sendEmailVerification,
   firebaseFireStore,
   timestamp,
   collection,
