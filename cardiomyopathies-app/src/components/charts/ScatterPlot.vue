@@ -283,14 +283,6 @@ export default {
           `Age vs ${this.selectedField.toUpperCase()} for ${this.mutationName}`
         )
       }
-      // if (this.$refs['mutation-data-age']) {
-      //   const ctx = this.$refs['mutation-data-age'].getContext('2d')
-      //   this.mutationChartInstance = this.createChart(
-      //     ctx,
-      //     newData,
-      //     `Age vs ${this.selectedField.toUpperCase()} for ${this.mutationName}`
-      //   )
-      // }
     }
   }
 }
