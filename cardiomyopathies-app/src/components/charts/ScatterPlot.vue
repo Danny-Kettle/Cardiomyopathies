@@ -27,6 +27,7 @@
 
 <script>
 import Chart from 'chart.js/auto'
+import { toHandlers } from 'vue'
 
 export default {
   data() {
@@ -54,13 +55,15 @@ export default {
     }
   },
   mounted() {
-    if (this.searchType === 'Overview') {
-      this.updateChart()
-    } else if (this.searchType === 'Singular') {
-      this.updateMutationChart()
-    } else if (this.searchType === 'Comparison') {
-      this.updateComparisonChart()
-    }
+    this.$nextTick(() => {
+      if (this.searchType === 'Overview') {
+        this.updateChart()
+      } else if (this.searchType === 'Singular') {
+        this.updateMutationChart()
+      } else if (this.searchType === 'Comparison') {
+        this.updateComparisonChart()
+      }
+    })
   },
   watch: {
     mutationName() {
@@ -98,6 +101,7 @@ export default {
           ]
         },
         options: {
+          animation: false,
           plugins: {
             title: {
               display: true,
@@ -127,15 +131,14 @@ export default {
         data = data.filter((datum) => datum.mutations && datum.mutations[this.mutationName])
       } else if (this.searchType === 'Comparison') {
         data = data.filter((datum) => {
-          if (!datum.mutations) return false
-          return this.mutations.some((mutation) => datum.mutations[mutation])
+          return this.mutations.some((mutation) => datum[mutation.toLowerCase()])
         })
       }
       return data
-        .filter((datum) => datum.patient && datum[field])
+        .filter((datum) => datum.row_num && datum[field])
         .map((datum) => {
           return {
-            x: datum.patient.age_at_mri,
+            x: datum.row_num.age_at_mri,
             y: datum[field]
           }
         })
@@ -155,7 +158,7 @@ export default {
 
       const datasets = this.mutations.map((mutation, index) => {
         const mutationData = this.getDataAgeCount(
-          this.data.filter((datum) => datum.mutations && datum.mutations[mutation]),
+          this.data.filter((datum) => datum[mutation.toLowerCase()]),
           this.selectedField
         )
         return {
@@ -169,7 +172,10 @@ export default {
         }
       })
 
-      if (this.$refs['mutation-data-age-comparison']) {
+      if (
+        this.$refs['mutation-data-age-comparison'] &&
+        this.$refs['mutation-data-age-comparison'].getContext
+      ) {
         const ctx = this.$refs['mutation-data-age-comparison'].getContext('2d')
         this.comparisonChartInstance = new Chart(ctx, {
           type: 'scatter',
@@ -177,6 +183,7 @@ export default {
             datasets
           },
           options: {
+            animation: false,
             plugins: {
               title: {
                 display: true,
@@ -203,13 +210,47 @@ export default {
           }
         })
       }
+      // if (this.$refs['mutation-data-age-comparison']) {
+      //   const ctx = this.$refs['mutation-data-age-comparison'].getContext('2d')
+      //   this.comparisonChartInstance = new Chart(ctx, {
+      //     type: 'scatter',
+      //     data: {
+      //       datasets
+      //     },
+      //     options: {
+      //       plugins: {
+      //         title: {
+      //           display: true,
+      //           text: `Age vs ${this.selectedField.toUpperCase()} for mutations: ${this.mutations.join(
+      //             ', '
+      //           )}`
+      //         }
+      //       },
+      //       responsive: true,
+      //       scales: {
+      //         x: {
+      //           title: {
+      //             display: true,
+      //             text: 'Age'
+      //           }
+      //         },
+      //         y: {
+      //           title: {
+      //             display: true,
+      //             text: 'Field value'
+      //           }
+      //         }
+      //       }
+      //     }
+      //   })
+      // }
     },
     updateChart() {
       if (this.chartInstance) {
         this.chartInstance.destroy()
       }
       const newData = this.getDataAgeCount(this.data, this.selectedField)
-      if (this.$refs['data-age']) {
+      if (this.$refs['data-age'] && this.$refs['data-age'].getContext) {
         const ctx = this.$refs['data-age'].getContext('2d')
         this.chartInstance = this.createChart(
           ctx,
@@ -220,13 +261,10 @@ export default {
     },
     getMutationData(data, field) {
       return data
-        .filter(
-          (datum) =>
-            datum.patient && datum[field] && datum.mutations && datum.mutations[this.mutationName]
-        )
+        .filter((datum) => datum.row_num && datum[field] && datum[this.mutationName.toLowerCase()])
         .map((datum) => {
           return {
-            x: datum.patient.age_at_mri,
+            x: datum.row_num.age_at_mri,
             y: datum[field]
           }
         })
@@ -235,6 +273,7 @@ export default {
       if (this.mutationChartInstance) {
         this.mutationChartInstance.destroy()
       }
+
       const newData = this.getMutationData(this.data, this.selectedField)
       if (this.$refs['mutation-data-age']) {
         const ctx = this.$refs['mutation-data-age'].getContext('2d')

@@ -1,6 +1,3 @@
 {
-    "editor.find.globalFindClipboard": true,
-    "mergeEditor.showDeletionMarkers": true,
-    "mergeEditor.diffAlgorithm": "smart",
-    "merge-conflict.autoNavigateNextConflict.enabled": true
+	"git.ignoreLimitWarning": true
 }

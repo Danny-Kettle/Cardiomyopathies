@@ -14,6 +14,9 @@
     <div style="width: 800px; height: 300px" v-if="searchType === 'Singular'">
       <canvas ref="mutations-patient-data" v-show="searchType === 'Singular'"></canvas>
     </div>
+    <div style="width: 800px; height: 300px" v-if="searchType === 'Singular'">
+      <canvas ref="mutations-patient-data-2" v-show="searchType === 'Singular'"></canvas>
+    </div>
   </div>
 </template>
 
@@ -37,13 +40,14 @@ export default {
   data() {
     return {
       mutationDataChart: null,
+      mutationDataPatientChart: null,
       selectedCategory: 'age'
     }
   },
-  async mounted() {
-    await this.$nextTick()
+  mounted() {
     const ctx = this.$refs['mutations-patient-count']?.getContext('2d')
     const ctx2 = this.$refs['mutations-patient-data']?.getContext('2d')
+    const ctx3 = this.$refs['mutations-patient-data-2']?.getContext('2d')
 
     if (this.searchType === 'Overview' && ctx) {
       this.createChart(
@@ -51,14 +55,18 @@ export default {
         this.getMutationsByGender(this.data),
         'Prevelence of Mutations by Gender'
       )
-    } else if (this.searchType === 'Singular' && ctx2 && this.selectedCategory) {
+    } else if (this.searchType === 'Singular' && ctx2 && ctx3 && this.selectedCategory) {
       this.updateMutationDataChart()
+      this.updateMutationDataPatientChart()
     }
   },
   watch: {
     mutationName() {
       if (this.mutationDataChart) {
         this.updateMutationDataChart()
+      }
+      if (this.mutationDataPatientChart) {
+        this.updateMutationDataPatientChart()
       }
     }
   },
@@ -69,10 +77,24 @@ export default {
       }
 
       const ctx2 = this.$refs['mutations-patient-data'].getContext('2d')
+
       this.mutationDataChart = this.createStackedBarChart(
         ctx2,
         this.getMutationDistributionData(this.data, this.selectedCategory),
-        'Mutation Distribution'
+        'Mutation Distribution across Age and Gender'
+      )
+    },
+    updateMutationDataPatientChart() {
+      if (this.mutationDataPatientChart) {
+        this.mutationDataPatientChart.destroy()
+      }
+
+      const ctx3 = this.$refs['mutations-patient-data-2']?.getContext('2d')
+
+      this.mutationDataPatientChart = this.createStackedBarChart(
+        ctx3,
+        this.getMutationPatientDistributionData(this.data),
+        'Mutation Distribution across conditions'
       )
     },
     createChart(ctx, chartData, chartLabel) {
@@ -105,6 +127,7 @@ export default {
           ]
         },
         options: {
+          animation: false,
           plugins: {
             title: {
               display: true,
@@ -132,6 +155,7 @@ export default {
           datasets: chartData.datasets
         },
         options: {
+          animation: false,
           plugins: {
             title: {
               display: true,
@@ -158,13 +182,22 @@ export default {
       }
 
       data.forEach((datum) => {
-        if (datum.mutations && datum.patient && typeof datum.patient.gender === 'boolean') {
-          for (const mutation in datum.mutations) {
-            if (
-              datum.mutations.hasOwnProperty.call(datum.mutations, mutation) &&
-              datum.mutations[mutation]
-            ) {
-              const gender = datum.patient.gender ? 'female' : 'male'
+        const mutationFields = [
+          'actc',
+          'mybpc3',
+          'myh7',
+          'myl2',
+          'tnnci',
+          'tnni3',
+          'tnnt2',
+          'tpm1',
+          'ttn'
+        ]
+
+        if (datum.row_num && typeof datum.row_num.female === 'boolean') {
+          for (const mutation of mutationFields) {
+            if (datum[mutation]) {
+              const gender = datum.row_num.female ? 'female' : 'male'
               if (mutationsByGender[gender][mutation]) {
                 mutationsByGender[gender][mutation] += 1
               } else {
@@ -184,20 +217,8 @@ export default {
         return this.getMutationCountsByGender(data)
       }
     },
-    getMutationCountsByCategory(data, category) {
-      let mutationCount = 0
-
-      data.forEach((datum) => {
-        if (
-          datum.patient &&
-          datum.patient[category] !== undefined &&
-          datum.mutations &&
-          datum.mutations[this.mutationName]
-        ) {
-          mutationCount += 1
-        }
-      })
-      return mutationCount
+    getMutationPatientDistributionData(data) {
+      return this.getMutationCountsByCategory(data)
     },
     getMutationCountsByAgeGroup(data) {
       const ageGroups = ['0-17', '18-34', '35-49', '50-64', '65+']
@@ -207,11 +228,10 @@ export default {
 
         data.forEach((datum) => {
           if (
-            datum.patient &&
-            datum.patient.age_at_mri >= minAge &&
-            datum.patient.age_at_mri <= maxAge &&
-            datum.mutations &&
-            datum.mutations[this.mutationName]
+            datum.row_num &&
+            datum.row_num.age_at_mri >= minAge &&
+            datum.row_num.age_at_mri <= maxAge &&
+            datum[this.mutationName.toLowerCase()]
           ) {
             count += 1
           }
@@ -240,10 +260,9 @@ export default {
 
         data.forEach((datum) => {
           if (
-            datum.patient &&
-            datum.patient.gender === isFemale &&
-            datum.mutations &&
-            datum.mutations[this.mutationName]
+            datum.row_num &&
+            datum.row_num.female === isFemale &&
+            datum[this.mutationName.toLowerCase()]
           ) {
             count += 1
           }
@@ -263,6 +282,32 @@ export default {
       ]
 
       return { labels: genders, datasets }
+    },
+    getMutationCountsByCategory(data) {
+      const categories = ['diabetes', 'myectomy', 'hypertension']
+
+      const counts = categories.map((category) => {
+        let count = 0
+
+        data.forEach((datum) => {
+          if (datum.row_num && datum.row_num[category] && datum[this.mutationName.toLowerCase()]) {
+            count += 1
+          }
+        })
+        return count
+      })
+
+      const datasets = [
+        {
+          label: this.mutationName,
+          data: counts,
+          backgroundColor: this.randomColor(0.2),
+          borderColor: this.randomColor(1),
+          borderWidth: 1
+        }
+      ]
+
+      return { labels: categories, datasets }
     },
     randomColor(opacity) {
       const r = Math.floor(Math.random() * 256)

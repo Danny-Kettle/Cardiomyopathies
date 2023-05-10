@@ -1,8 +1,8 @@
 <template>
-    <div class="h-full flex justify-center items-center">
-      <div class="flex justify-center w-1/3 mb-8">
-          <div class="bg-white shadow-md w-full rounded px-24 py-16">
-            <h2 class="text-2xl font-semibold mb-4">{{ isSignup ? 'Create Account' : 'Login' }}</h2>
+    <div class="flex justify-center items-center">
+      <div class="flex justify-center w-11/12 lg:w-1/2 my-8">
+          <div class="bg-white shadow-md w-full rounded px-12 lg:px-24 py-16">
+            <h2 class="text-xl md:text-2xl font-semibold mb-4">{{ isSignup ? 'Create Account' : 'Login' }}</h2>
             <form @submit.prevent="handleSubmit">
               <div class="mb-4">
                 <label class="block mb-2 text-gray-800" for="email">Email</label>
@@ -91,14 +91,14 @@
                   required
                 />
               </div>
-              <div class="flex justify-between mb-4 items-center">
+              <div class="flex flex-col gap-6 lg:flex-row justify-between mb-4 items-start lg:items-center">
                 <button
                   class="px-4 py-2 text-white rounded-md bg-blue-500 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                   type="submit"
                 >
                   {{ isSignup ? 'Sign Up' : 'Log In' }}
                 </button>
-                <button
+                <button     
                   class="text-blue-500 hover:text-blue-600 focus:outline-none"
                   type="button"
                   @click="isSignup = !isSignup"
@@ -108,8 +108,11 @@
                   }}
                 </button>
               </div>
-              <div class="mb-4 flex justify-end" v-if="!isSignup">
-                <router-link to="/reset-password" class="text-blue-400">Forgot password?</router-link>
+              <div class="flex justify-start lg:justify-end" v-if="!isSignup">
+                <router-link to="/reset-password" class="text-blue-600">Forgot password?</router-link>
+              </div>
+              <div v-if="error">
+                <p class="text-red-600">{{error}}</p>
               </div>
             </form>
           </div>
@@ -117,9 +120,11 @@
     </div>
 </template>
 <script>
-import {signInWithEmailAndPassword, createUserWithEmailAndPassword , getDocs, collection, query, where, doc, firebaseAuthentication, firebaseFireStore , setDoc} from '../firebase/database'
-import { updateUserStatus } from '../stores/userModule';
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification ,getDocs, collection, query, where, doc, firebaseAuthentication, firebaseFireStore , setDoc} from '../firebase/database'
 import {eventBus} from '../stores/eventBus';
+
+//Add this in the higher level component for global use 
+
 
 export default {
   props: {
@@ -127,12 +132,14 @@ export default {
   },
   data() {
     return {
+      error: '',
       email: '',
       username: '',
       password: '',
       confirmPassword: '',
       firstName: '',
       lastName: '',
+      institute: '',
       role: '',
       isSignup: false,
       isDoctor: false
@@ -153,8 +160,15 @@ export default {
         )
         // create a new user in Firestore
         createUserWithEmailAndPassword(firebaseAuthentication, this.email, this.password)
-          .then((userCredential) => {
+          .then(async (userCredential) => {
             const user = userCredential.user
+            
+            //Regular User
+            await sendEmailVerification(user);
+
+            //Doctor - Send and email to our gmail and verify user if they are real doctor
+            // 
+
             const userData = {
               email: this.email,
               username: this.username,
@@ -163,6 +177,7 @@ export default {
               institute: this.institute,
               role: this.role == "Doctor" ? this.role.toLowerCase() : "user", 
             }
+            
             console.log("Firestore object:", firebaseFireStore);
             console.log("User data:", userData);
             return setDoc(doc(firebaseFireStore, 'users', user.uid), userData)
@@ -187,27 +202,36 @@ export default {
         // sign in user with email and password in Firestore
         signInWithEmailAndPassword(firebaseAuthentication, this.email, this.password)
           .then(async (userCredential) => {
-            const db = firebaseFireStore;
-            const q = query(collection(db, "users"), where("email", "==", this.email));
-            const querySnapshot = await getDocs(q);
-            
-            if (!querySnapshot.empty) {
-            const docSnapshot = querySnapshot.docs[0];
-            const docId = docSnapshot.id;
-            console.log(docId)
-            const userData = {
-              email: this.email,
-              username: docSnapshot.data().username,
-              firstName: docSnapshot.data().firstName,
-              lastName: docSnapshot.data().lastName,
-              institute: docSnapshot.data().institute,
-              role: docSnapshot.data().role,
-            };
-              sessionStorage.setItem("user", JSON.stringify(userData));
-              eventBus.emit('user-changed');
-              // updateUserStatus(userData);
-              this.$router.push('/');
-            };
+            const user = userCredential.user;
+
+            if(!user.emailVerified){
+              this.error = "Email is not verified please check your inbox and junk";
+            }else{
+              const db = firebaseFireStore;
+              const q = query(collection(db, "users"), where("email", "==", this.email));
+              const querySnapshot = await getDocs(q);
+  
+              //Make ID use a token to prevent showing the uid to the user 
+              
+              if (!querySnapshot.empty) {
+              const docSnapshot = querySnapshot.docs[0];
+              const docId = docSnapshot.id;
+              const userData = {
+                email: this.email,
+                username: docSnapshot.data().username,
+                firstName: docSnapshot.data().firstName,
+                lastName: docSnapshot.data().lastName,
+                institute: docSnapshot.data().institute,
+                role: docSnapshot.data().role,
+              };
+                // document.cookie = `uid=${{docId}}; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/`;
+                this.$cookies.set('uid', docId, { expires: 0 })
+                sessionStorage.setItem("user", JSON.stringify(userData));
+                eventBus.emit('user-changed');
+                this.$router.push('/');
+              };
+            }
+
         })
         .catch((error) => {
           const errorCode = error.code
