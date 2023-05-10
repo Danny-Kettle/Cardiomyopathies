@@ -10,8 +10,7 @@ The Cardiomyopathy Repository is a collaborative project developed to facilitate
 
 We have built this project using the following technologies and tools:
 
-## Front-end: HTML, CSS, JavaScript, Vue.js
-
+Front-end: HTML, CSS, JavaScript, Vue.js
 Back-end: Vue.js, Firebase
 Database: Firestore/Realtime Database
 Data Visualization: Chart.js
