@@ -30,7 +30,7 @@ We have built this project using the following technologies and tools:
 
 ## URL
 
-The project is available to view at: [insert url here]
+The project is available to view at: https://cardiomyopathy-ada0f.web.app
 
 ## License
 
