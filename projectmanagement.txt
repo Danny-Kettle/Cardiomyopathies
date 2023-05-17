@@ -1,0 +1,16 @@
+Project Management
+
+Our group worked with an Agile kanban style development process, using a Kanban board for task planning and Discord for communication. We decided on using a Kanban board as it provides a
+visual representation of tasks and their stage in development which can be easily interpreted. We used Discord to communicate as we are all familiar with it as well as, compared to MS teams,
+providing better functionality for voice/video calling and screen sharing which enabled efficient collaboration. Furthermore, we were able to be in close contact with each other and could
+respond to queries/issues that other may be facing and when coupled with the live stream feature, peer programming was utilised to work through these issues.
+
+After discussing in our initial meeting, we found that Wednesdays and Fridays would be the optimum days for our group so we typically met on these days, however we also held some meetings on
+Mondays whenever necessary. We centered our sprint planning around these meetings and did short 3 to 5 day sprints before convening and discussing our progress. This flexible approach to
+meetings benefitted us we were able to adapt and restructure our tasks dependent on group members availability and changes in our implementation of the project itself.
+
+Overall, our approach allowed our group to work closely, adapt to solve challenges, and was very important in the success of the project. By using Kanban and Discord, we were able to create a
+collaborative environment which allowed us to maximise productivity and support each others efforts.
+
+
+Kanban Board: https://trello.com/b/g5WkJrX3/kanban
