@@ -1,30 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div id="bar">
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Overview'">
-      <canvas ref="mutations-count"></canvas>
-    </div>
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Overview'">
-      <canvas ref="avg-values"></canvas>
-    </div>
-    <div v-if="searchType === 'Comparison'">
-      <label for="field-select">Select field:</label>
-      <select id="field-select" v-model="selectedField">
-        <option disabled value="">Please select a field</option>
-        <option value="lvmass" selected>LV Mass</option>
-        <option value="rvef">RVEF</option>
-        <option value="rsv">RSV</option>
-        <option value="lesv">LESV</option>
-        <option value="redv">REDV</option>
-        <option value="resv">RESV</option>
-        <option value="lvef">LVEF</option>
-        <option value="lsv">LSV</option>
-        <option value="ledv">LEDV</option>
-      </select>
-    </div>
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Comparison'">
-      <canvas ref="avg-values-comparison"></canvas>
-=======
   <div id="bar" class="border-2 flex flex-col justify-center items-center py-10 w-full">
     <div class="lg:ml-10 lg:mr-auto flex flex-row gap-4 items-center" v-if="searchType === 'Comparison'">
         <label class="text-slate-600 text-md lg:text-lg" for="field-select">Select field:</label>
@@ -52,7 +26,6 @@
       <div v-if="searchType === 'Comparison'">
         <canvas ref="avg-values-comparison"></canvas>
       </div>
->>>>>>> development.0.2
     </div>
   </div>
 </template>

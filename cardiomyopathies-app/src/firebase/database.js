@@ -27,12 +27,7 @@ import {
   setDoc
 } from 'firebase/firestore'
 
-<<<<<<< HEAD
-=======
 import { getFunctions, httpsCallable } from 'firebase/functions'
-
-
->>>>>>> development.0.2
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDtHDqAiZSBSSe5S5U4FLQxcoStC6jW8FI',
@@ -48,7 +43,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const firebaseAuthentication = getAuth()
 const firebaseFireStore = getFirestore()
-const firebaseFunctions = getFunctions(app) 
+const firebaseFunctions = getFunctions(app)
 const timestamp = serverTimestamp()
 
 export {

@@ -1,10 +1,6 @@
 <template>
     <div class="flex flex-row min-h-screen w-full bg-gray-100">
-<<<<<<< HEAD
-        <div id="sidebar" class="h-full z-40 fixed lg:flex w-1/2 lg:w-1/6 bg-gray-100 text-gray-600 gap-8 shadow-lg items-center py-40 font-bold text-lg flex-col" :class="sidebarClasses"  >
-=======
         <div id="sidebar" class="h-full z-40 fixed lg:flex w-1/2 lg:w-1/6 bg-slate-500 text-white gap-8 shadow-lg items-center py-40 font-semibold tracking-wider text-lg flex-col" :class="sidebarClasses"  >
->>>>>>> development.0.2
           <i v-if="sidebarOpen" @click="toggleSidebar" class="z-50 absolute left-8 top-8 fa-solid fa-xmark"></i>
           <router-link class="flex flex-row" to="/">
               <i class="fa fa-home my-auto w-12"></i> <span class="w-12">Home</span>
@@ -38,31 +34,20 @@
               </router-link>
           </div>
         </div>
-<<<<<<< HEAD
-        <main class="flex-1 overflow-y-hidden ml-1/4">
-=======
         <main class="flex-1 overflow-y-hidden">
->>>>>>> development.0.2
           <header class="w-full h-32 lg:mb-10 py-4 flex justify-content shadow-md lg:shadow-none">
             <div  @click="toggleSidebar" class="absolute lg:hidden left-10 top-12">
               <i class="fa-solid fa-bars text-slate-600 text-2xl"></i>
             </div>
-<<<<<<< HEAD
-            <div class=" h-full mx-auto flex justify-center items-center">
+              <div class=" h-full mx-auto flex justify-center items-center">
               <span class="text-slate-600 font-extrabold text-lg lg:text-4xl tracking-tight -mr-3 lg:-mr-4">GR</span>
               <img class="h-3/5 lg:h-3/4" src="../assets/img/heartlogo.png"/>
               <span class="text-slate-600 font-extrabold text-lg lg:text-4xl tracking-tight -ml-3 lg:-ml-4">PH</span>
-=======
-            <div class=" h-full text-slate-600  mx-auto flex justify-center items-center">
-              <span class="font-extrabold tracking-wider text-lg lg:text-4xl -mr-3 lg:-mr-4">GR</span>
-              <img class="h-3/5 lg:h-3/4" src="../assets/img/heartlogo.png"/>
-              <span class="font-extrabold text-lg lg:text-4xl -ml-3 lg:-ml-4">PH</span>
->>>>>>> development.0.2
             </div>
           </header>
           <slot></slot>
-        </main>
-      </diV>
+          </main>
+      </div>
 </template>
   
   
@@ -136,10 +121,6 @@ export default {
     @media only screen and (min-width: 1024px) {
       main{
           margin-left: calc(100% / 6); 
-<<<<<<< HEAD
-=======
-
->>>>>>> development.0.2
       }
     }
   </style>
