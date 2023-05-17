@@ -7,8 +7,8 @@
       </div>
       <div class="">
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-          <div v-for="(article, index) in articles" :key="index" class="relative h-96 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-white overflow-hidden" @click="redirectToArticle(article.url)">
-            <img :src="imageUrls[index] ? imageUrls[index] : defaultImageUrl" alt="" class="cursor-pointer absolute inset-0 h-full w-full object-cover" />
+          <div v-for="(article, index) in articles" :key="index" id="article" class="relative h-96 rounded-lg cursor-pointer hover:opacity-80 transition-opacity text-white overflow-hidden" @click="redirectToArticle(article.url)">
+            <img :src="imageUrls[index] ? imageUrls[index] : defaultImageUrl" alt="" id="api-photo" class="cursor-pointer absolute inset-0 h-full w-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-tl from-indigo-800 to-black opacity-60 z-10 "></div>
             <div class="absolute flex flex-col items-start shadow-lg inset-0 z-20 p-4">
               <h2 class="text-2xl text-center absolute font-bold mb-2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{{ article.title }}</h2>
