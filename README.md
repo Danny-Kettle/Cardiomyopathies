@@ -10,23 +10,23 @@ The Cardiomyopathy Repository is a collaborative project developed to facilitate
 
 We have built this project using the following technologies and tools:
 
-## Front-end: HTML, CSS, JavaScript, Vue.js
-
-Back-end: Vue.js, Firebase
-Database: Firestore/Realtime Database
-Data Visualization: Chart.js
-API Integration: newsapi.org, unsplash.com, hpo.jax.org
-Deployment: Firebase Hosting
+- Front-end: HTML, CSS, JavaScript, Vue.js
+- Back-end: Vue.js, Firebase
+- Database: Firestore/Realtime Database
+- Data Visualization: Chart.js
+- API Integration: newsapi.org, unsplash.com, hpo.jax.org
+- Deployment: Firebase Hosting
 
 ## Installation
 
-Clone the repository: git clone https://github.com/Danny-Kettle/Cardiomyopathies.git
-Install the required dependencies: npm install
+1. Clone the repository: `git clone https://github.com/Danny-Kettle/Cardiomyopathies.git`
+2. Change directory into 'cardiomyopathies-app': `cd cardiomyopathies-app`
+3. Install the required dependencies: `npm install`
 
 ## Usage
 
-Start the development server: npm run dev
-Access the web application in your browser at: http://localhost:5173 (Default Vue server)
+1. Start the development server: `npm run dev`
+2. Access the web application in your browser at: http://localhost:5173 (Default Vue server)
 
 ## URL
 
