@@ -32,6 +32,10 @@ We have built this project using the following technologies and tools:
 
 The project is available to view at: https://cardiomyopathy-ada0f.web.app
 
+## Disclaimer
+
+News API does not pass firebase hosting firewalls - Please use local host to mark the news page.
+
 ## License
 
 This project is licensed under the MIT License.
