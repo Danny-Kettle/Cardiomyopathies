@@ -45,6 +45,7 @@
                     <span class="w-28">Save Account</span>
             </button>
           </div>
+<<<<<<< HEAD
           <div class="flex flex-col gap-4 mb-10">
             <h2 class="font-bold text-xl text-slate-600 uppercase mb-4">Account Details</h2>
             <p
@@ -63,30 +64,48 @@
               I am a doctor
             </p>
           </div>
+=======
+>>>>>>> development.0.2
           <div v-if="user.role === 'doctor'" class="flex flex-col">
             <div class="flex flex-col w-full justify-between">
               <h2 class="font-bold text-xl text-slate-600 uppercase mb-4">Records</h2>
               <div class="flex flex-row flex-wrap gap-2 lg:gap-8">
                 <button
                   @click="isTableModal = !isTableModal"
+<<<<<<< HEAD
+=======
+                  id="viewRecords"
+>>>>>>> development.0.2
                   class="flex text-xs flex-row gap-4 py-4 px-4 bg-orange-400 rounded text-white justify-center items-center uppercase shadow font-bold transform duration-300 origin-center ease-in-out hover:scale-110"
                 >
                   <span class="w-28 flex justify-between items-center"><i class="fa-solid fa-expand"></i> View Records</span>
                 </button>
                 <button
                   @click="isPatientTableModal = !isPatientTableModal"
+<<<<<<< HEAD
+=======
+                  id="viewPatient"
+>>>>>>> development.0.2
                   class="flex text-xs flex-row gap-4 py-4 px-4 bg-indigo-400 rounded text-white justify-center items-center uppercase shadow font-bold transform duration-300 origin-center ease-in-out hover:scale-110"
                 >
                   <span class="w-28 flex justify-between items-center"><i class="fa-solid fa-expand"></i> View Patients</span>
                 </button>
                 <button
                   @click="isRecordModal = !isRecordModal"
+<<<<<<< HEAD
+=======
+                  id="addRecords"
+>>>>>>> development.0.2
                   class="flex text-xs flex-row gap-4 py-4 px-4 bg-emerald-400 rounded text-white justify-center items-center uppercase shadow font-bold transform duration-300 origin-center ease-in-out hover:scale-110"
                 >
                   <span class="w-28 flex justify-between items-center"><i class="fa fa-plus"></i> Add Record</span>
                 </button>
                 <button
                   @click="isPatientModal = !isPatientModal"
+<<<<<<< HEAD
+=======
+                  id="addPatient"
+>>>>>>> development.0.2
                   class="flex text-xs flex-row gap-4 py-4 px-4 bg-blue-400 rounded text-white justify-center items-center uppercase shadow font-bold transform duration-300 origin-center ease-in-out hover:scale-110"
                 >
                 <span class="w-28 flex justify-between items-center"><i class="fa fa-plus"></i> Add Patient</span>

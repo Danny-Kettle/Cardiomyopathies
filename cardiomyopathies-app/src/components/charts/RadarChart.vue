@@ -1,6 +1,11 @@
 <template>
+<<<<<<< HEAD
   <div id="radar">
     <div style="width: 1200px; height: 600px" v-if="searchType === 'Singular'">
+=======
+  <div id="radar" class="border-2 flex flex-col justify-center items-center py-10 w-full">
+    <div  v-if="searchType === 'Singular'">
+>>>>>>> development.0.2
       <canvas id="radar-chart-canvas" ref="radar-chart"></canvas>
     </div>
   </div>

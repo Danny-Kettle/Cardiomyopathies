@@ -1,18 +1,22 @@
 <template>
-  <div id="sbar">
-    <div v-if="searchType === 'Singular'">
-      <label for="category-select">Select category:</label>
-      <select id="category-select" v-model="selectedCategory" @change="updateMutationDataChart">
-        <option disabled value="">Please select a category</option>
+  <div id="sbar" class="border-2 flex flex-col justify-center gap-8 items-center py-10 w-full">
+    <div class="lg:mr-auto lg:ml-10 flex flex-row gap-4 items-center" v-if="searchType === 'Singular'">
+      <label class="text-slate-600 text-md lg:text-lg" for="category-select">Select category:</label>
+      <select id="category-select" class="px-2 py-2 shadow" v-model="selectedCategory" @change="updateMutationDataChart">
         <option value="age">Age Groups</option>
         <option value="gender">Gender</option>
       </select>
     </div>
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Overview'">
-      <canvas ref="mutations-patient-count" v-show="searchType === 'Overview'"></canvas>
-    </div>
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Singular'">
-      <canvas ref="mutations-patient-data" v-show="searchType === 'Singular'"></canvas>
+    <div class="w-11/12 lg:w-4/6">
+      <div v-if="searchType === 'Overview'">
+        <canvas ref="mutations-patient-count" class="mr-0" v-show="searchType === 'Overview'"></canvas>
+      </div>
+      <div v-if="searchType === 'Singular'">
+        <canvas ref="mutations-patient-data" v-show="searchType === 'Singular'"></canvas>
+      </div>
+      <div v-if="searchType === 'Singular'">
+        <canvas ref="mutations-patient-data-2" v-show="searchType === 'Singular'"></canvas>
+      </div>
     </div>
     <div style="width: 800px; height: 300px" v-if="searchType === 'Singular'">
       <canvas ref="mutations-patient-data-2" v-show="searchType === 'Singular'"></canvas>
