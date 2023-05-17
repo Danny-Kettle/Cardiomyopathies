@@ -34,7 +34,7 @@ The project is available to view at: https://cardiomyopathy-ada0f.web.app
 
 ## Disclaimer
 
-News API does not pass firebase hosting firewalls - Please use local host to mark the news page.
+News API does not work on hosted web app. This is due to it requiring payment when deployed. It functions as normal in local environment
 
 ## License
 
