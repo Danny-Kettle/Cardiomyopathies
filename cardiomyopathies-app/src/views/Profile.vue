@@ -45,24 +45,6 @@
                     <span class="w-28">Save Account</span>
             </button>
           </div>
-          <div class="flex flex-col gap-4 mb-10">
-            <h2 class="font-bold text-xl text-slate-600 uppercase mb-4">Account Details</h2>
-            <p
-              class="font-bold text-sm cursor-pointer w-fit tracking-wider uppercase text-blue-800 transform hover:scale-110 origin-left duration-300 ease-in-out"
-            >
-              Change Email
-            </p>
-            <p
-              class="font-bold text-sm cursor-pointer w-fit tracking-wider uppercase text-blue-800 transform hover:scale-110 origin-left duration-300 ease-in-out"
-            >
-              Reset Password
-            </p>
-            <p
-              class="font-bold text-sm cursor-pointer w-fit tracking-wide uppercase text-blue-800 transform hover:scale-110 origin-left duration-300 ease-in-out"
-            >
-              I am a doctor
-            </p>
-          </div>
           <div v-if="user.role === 'doctor'" class="flex flex-col">
             <div class="flex flex-col w-full justify-between">
               <h2 class="font-bold text-xl text-slate-600 uppercase mb-4">Records</h2>
