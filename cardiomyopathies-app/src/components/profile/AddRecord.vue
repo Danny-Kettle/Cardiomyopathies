@@ -106,7 +106,7 @@
                 </div>
 
                 <div class="text-right w-full">
-                <button type="submit" class="mt-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
+                    <button id="#submitButton" type="submit" class="mt-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
                 </div>
             </form>
         </div>
