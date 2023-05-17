@@ -1,103 +1,77 @@
 <template>
-  <main>
-    <h1>Search Type: {{ searchType }}</h1>
+    <div class="flex flex-col justify-center pb-20 pt-10 lg:pt-0 mx-auto w-11/12 lg:max-w-screen-lg">
+      <div class="flex flex-col gap-8 mb-10">
+        <div class="flex flex-col lg:flex-row gap-8 lg:items-center">
+          <div class="flex flex-row gap-4 items-center">
+            <label class="text-slate-600 text-lg ">Search Type : </label>
+            <!-- Dropdown menu to select search type -->
+            <select id="searchType" class="shadow px-4 py-2" v-model="searchType">
+              <option value="Overview">Overview</option>
+              <option value="Singular">Singular</option>
+              <option value="Comparison">Comparison</option>
+            </select>
+          </div>
 
-    <!-- Dropdown menu to select search type -->
-    <select id="searchType" v-model="searchType">
-      <option disabled value="">Please select a field</option>
-      <option value="Overview">Overview</option>
-      <option value="Singular">Singular</option>
-      <option value="Comparison">Comparison</option>
-    </select>
+          <!-- Input to select apicalHCM filter -->
+          <label class="flex flex-row gap-4">
+            <input type="checkbox" v-model="apicalHcmFilter" />
+            <span>Show data for Apical HCM</span>
+          </label>
+        </div>
 
-    <!-- Input to select apicalHCM filter -->
-    <label>
-      <input type="checkbox" v-model="apicalHcmFilter" />
-      Show data for Apical HCM
-    </label>
-
-    <!-- Display mutation dropdown when search type is 'Singular' and data is fetched -->
-    <template v-if="searchType === 'Singular' && dataFetched">
-      <h1>Mutation: {{ mutationName }}</h1>
-      <select id="mutationName" v-model="mutationName">
-        <option value="ACTC">ACTC</option>
-        <option value="MYBPC3">MYBPC3</option>
-        <option value="MYH7">MYH7</option>
-        <option value="MYL2">MYL2</option>
-        <option value="TNNCI">TNNCI</option>
-        <option value="TNNI3">TNNI3</option>
-        <option value="TNNT2">TNNT2</option>
-        <option value="TPM1">TPM1</option>
-        <option value="TTN">TTN</option>
-      </select>
-    </template>
-
-    <!-- Display mutation checkboxes when search type is 'Comparison' and data is fetched -->
-    <template v-if="searchType === 'Comparison' && dataFetched">
-      <div v-for="mutation in availableMutations" :key="mutation">
-        <input type="checkbox" :value="mutation" v-model="mutationArray" />
-        <label>{{ mutation }}</label>
+        <template v-if="searchType === 'Singular' && dataFetched">
+          <div class="flex flex-row gap-4 lg:items-center">
+            <label class="text-slate-600 text-lg ">Mutation : </label>
+            <select id="mutationName" class="shadow px-4 py-2" v-model="mutationName">
+              <option value="ACTC">ACTC</option>
+              <option value="MYBPC3">MYBPC3</option>
+              <option value="MYH7">MYH7</option>
+              <option value="MYL2">MYL2</option>
+              <option value="TNNCI">TNNCI</option>
+              <option value="TNNI3">TNNI3</option>
+              <option value="TNNT2">TNNT2</option>
+              <option value="TPM1">TPM1</option>
+              <option value="TTN">TTN</option>
+            </select>
+          </div>
+        </template>
+        <!-- Display mutation checkboxes when search type is 'Comparison' and data is fetched -->
+        <div class="flex flex-col lg:flex-row gap-4 lg:gap-8 justify-center">
+          <template v-if="searchType === 'Comparison' && dataFetched">
+            <div class="flex flex-row gap-4" v-for="mutation in availableMutations" :key="mutation">
+              <label class="text-sm">{{ mutation }} :</label>
+              <input type="checkbox" :value="mutation" v-model="mutationArray" />
+            </div>
+          </template>
+        </div>
       </div>
-    </template>
 
-    <!-- Display overview charts when search type is 'Overview' and data is fetched -->
-    <template v-if="searchType === 'Overview' && dataFetched">
-      <BarChart
-        :key="componentKey"
-        :data="chartData"
-        :search-type="searchType"
-        :apical-hcm="apicalHcmFilter"
-      />
-      <StackedBarChart :key="componentKey" :data="chartData" :search-type="searchType" />
-      <ScatterPlot :key="componentKey" :data="chartData" :search-type="searchType" />
-      <h1>Patient Data</h1>
-      <PieChart :key="componentKey" :data="chartData" :search-type="searchType" />
-    </template>
+      <div class="flex flex-col gap-10 ">
+        <!-- Display overview charts when search type is 'Overview' and data is fetched -->
+      <template v-if="searchType === 'Overview' && dataFetched">
+        <div class="flex flex-col gap-20">
+          <BarChart :key="componentKey" :data="chartData" :search-type="searchType" :apical-hcm="apicalHcmFilter" />
+          <StackedBarChart :key="componentKey" :data="chartData" :search-type="searchType" />
+          <ScatterPlot :key="componentKey" :data="chartData" :search-type="searchType" />
+          <PieChart :key="componentKey" :data="chartData" :search-type="searchType" />
+        </div>
+      </template>
 
-    <!-- Display singular charts when search type is 'Singular' and data is fetched -->
-    <template v-if="searchType === 'Singular' && dataFetched">
-      <StackedBarChart
-        :key="componentKey"
-        :data="chartData"
-        :search-type="searchType"
-        :mutation-name="mutationName"
-      />
-      <ScatterPlot
-        :key="componentKey"
-        :data="chartData"
-        :search-type="searchType"
-        :mutation-name="mutationName"
-      />
-      <RadarChart
-        :key="componentKey"
-        :data="chartData"
-        :search-type="searchType"
-        :mutation-name="mutationName"
-      />
-      <PieChart
-        :key="componentKey"
-        :data="chartData"
-        :search-type="searchType"
-        :mutation-name="mutationName"
-      />
-    </template>
+      <!-- Display singular charts when search type is 'Singular' and data is fetched -->
+      <template v-if="searchType === 'Singular' && dataFetched">
+        <StackedBarChart :key="componentKey" :data="chartData" :search-type="searchType" :mutation-name="mutationName" />
+        <ScatterPlot :key="componentKey" :data="chartData" :search-type="searchType" :mutation-name="mutationName" />
+        <RadarChart :key="componentKey" :data="chartData" :search-type="searchType" :mutation-name="mutationName" />
+        <PieChart :key="componentKey" :data="chartData" :search-type="searchType" :mutation-name="mutationName" />
+      </template>
 
-    <!-- Display comparison charts when search type is 'Comparison' and data is fetched -->
-    <template v-if="searchType === 'Comparison' && dataFetched">
-      <ScatterPlot
-        :key="componentKey"
-        :data="chartData"
-        :search-type="searchType"
-        :mutations="mutationArray"
-      />
-      <BarChart
-        :key="componentKey"
-        :data="chartData"
-        :search-type="searchType"
-        :mutations="mutationArray"
-      />
-    </template>
-  </main>
+      <!-- Display comparison charts when search type is 'Comparison' and data is fetched -->
+      <template v-if="searchType === 'Comparison' && dataFetched">
+        <ScatterPlot :key="componentKey" :data="chartData" :search-type="searchType" :mutations="mutationArray" />
+        <BarChart :key="componentKey" :data="chartData" :search-type="searchType" :mutations="mutationArray" />
+      </template>
+    </div>
+</div>
 </template>
 
 <script>
@@ -112,7 +86,7 @@ import RadarChart from '../components/charts/RadarChart.vue'
 export default {
   components: {
     BarChart,
-    StackedBarChart,  
+    StackedBarChart,
     ScatterPlot,
     PieChart,
     RadarChart

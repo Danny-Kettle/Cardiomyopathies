@@ -1,26 +1,30 @@
 <template>
-  <div>
-    <label for="field-select">Select field:</label>
-    <select id="field-select" v-model="selectedField" @change="updateChart">
-      <option disabled value="">Please select a field</option>
-      <option value="lvmass">LV Mass</option>
-      <option value="rvef">RVEF</option>
-      <option value="rsv">RSV</option>
-      <option value="lesv">LESV</option>
-      <option value="redv">REDV</option>
-      <option value="resv">RESV</option>
-      <option value="lvef">LVEF</option>
-      <option value="lsv">LSV</option>
-      <option value="ledv">LEDV</option>
-    </select>
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Overview'">
-      <canvas ref="data-age"></canvas>
+  <div class="border-2 flex flex-col justify-center gap-8 items-center py-10 w-full">
+    <div class="lg:mr-auto lg:ml-10 flex flex-row gap-4 items-center">
+      <label class="text-slate-600 text-md lg:text-lg" for="field-select">Select field :</label>
+      <select id="field-select" class="px-2 py-2 shadow" v-model="selectedField" @change="updateChart">
+        <option disabled value="">Please select a field</option>
+        <option value="lvmass">LV Mass</option>
+        <option value="rvef">RVEF</option>
+        <option value="rsv">RSV</option>
+        <option value="lesv">LESV</option>
+        <option value="redv">REDV</option>
+        <option value="resv">RESV</option>
+        <option value="lvef">LVEF</option>
+        <option value="lsv">LSV</option>
+        <option value="ledv">LEDV</option>
+      </select>
     </div>
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Singular'">
-      <canvas ref="mutation-data-age"></canvas>
-    </div>
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Comparison'">
-      <canvas ref="mutation-data-age-comparison"></canvas>
+    <div class="w-11/12 lg:w-4/6">
+      <div v-if="searchType === 'Overview'">
+        <canvas ref="data-age"></canvas>
+      </div>
+      <div v-if="searchType === 'Singular'">
+        <canvas ref="mutation-data-age"></canvas>
+      </div>
+      <div v-if="searchType === 'Comparison'">
+        <canvas ref="mutation-data-age-comparison"></canvas>
+      </div>
     </div>
   </div>
 </template>

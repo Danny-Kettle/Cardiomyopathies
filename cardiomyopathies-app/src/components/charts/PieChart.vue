@@ -1,12 +1,17 @@
 <template>
-  <div id="pie">
-    <div id="this" style="width: 800px; height: 300px" v-if="searchType === 'Overview'">
+  <div id="pie" class="border-2 flex flex-col gap-4 justify-center items-center py-10 w-full">
+    <h1 class="ml-10 mr-auto text-slate-600 text-lg">Patient Data</h1>
+    <div id="this" class="border-2 py-20 flex flex-col gap-12 overflow-auto" style="width: 800px; height: 500px"
+      v-if="searchType === 'Overview'">
       <canvas id="scar-count-canvas" ref="scar-count"></canvas>
       <canvas id="diabetes-count-canvas" ref="diabetes-count"></canvas>
       <canvas id="hypertension-count-canvas" ref="hypertension-count"></canvas>
       <canvas id="myectomy-count-canvas" ref="myectomy-count"></canvas>
     </div>
-    <div style="width: 800px; height: 300px" v-if="searchType === 'Singular'">
+    <div style="width: 800px; height: 300px" v-if="searchType === 'Singular' && !isTabletOrSmaller">
+      <canvas id="mutation-scar-count-canvas" ref="mutation-scar-count"></canvas>
+    </div>
+    <div style="width: 400px; height: 150px" v-if="searchType === 'Singular' && isTabletOrSmaller">
       <canvas id="mutation-scar-count-canvas" ref="mutation-scar-count"></canvas>
     </div>
   </div>
@@ -31,9 +36,14 @@ export default {
   },
   data() {
     return {
-      mutationScarChart: null
+      mutationScarChart: null,
+    }
+  }, computed: {
+    isTabletOrSmaller() {
+      return window.innerWidth <= 768;
     }
   },
+
   mounted() {
     const scarCountCtx = this.$refs['scar-count']?.getContext('2d')
     const diabetesCountCtx = this.$refs['diabetes-count']?.getContext('2d')
@@ -41,6 +51,7 @@ export default {
     const myectomyCountCtx = this.$refs['myectomy-count']?.getContext('2d')
 
     const mutationScarCtx = this.$refs['mutation-scar-count']?.getContext('2d')
+
 
     if (this.searchType === 'Overview') {
       if (scarCountCtx) {
@@ -97,7 +108,7 @@ export default {
       if (this.searchType === 'Singular') {
         this.updateMutationScarChart()
       }
-    }
+    },
   },
   methods: {
     updateMutationScarChart() {
