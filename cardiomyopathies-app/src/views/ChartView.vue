@@ -43,38 +43,58 @@
     <!-- Display overview charts when search type is 'Overview' and data is fetched -->
     <template v-if="searchType === 'Overview' && dataFetched">
       <BarChart
+        data-test="bar-chart"
         :key="componentKey"
         :data="chartData"
         :search-type="searchType"
         :apical-hcm="apicalHcmFilter"
       />
-      <StackedBarChart :key="componentKey" :data="chartData" :search-type="searchType" />
-      <ScatterPlot :key="componentKey" :data="chartData" :search-type="searchType" />
+      <StackedBarChart
+        data-test="stacked-bar-chart"
+        :key="componentKey"
+        :data="chartData"
+        :search-type="searchType"
+      />
+      <ScatterPlot
+        data-test="scatter-plot"
+        :key="componentKey"
+        :data="chartData"
+        :search-type="searchType"
+      />
       <h1>Patient Data</h1>
-      <PieChart :key="componentKey" :data="chartData" :search-type="searchType" />
+      <PieChart
+        data-test="pie-chart"
+        :key="componentKey"
+        :data="chartData"
+        :search-type="searchType"
+      />
     </template>
 
     <!-- Display singular charts when search type is 'Singular' and data is fetched -->
     <template v-if="searchType === 'Singular' && dataFetched">
       <StackedBarChart
+        data-test="stacked-bar-chart"
         :key="componentKey"
         :data="chartData"
         :search-type="searchType"
         :mutation-name="mutationName"
       />
       <ScatterPlot
+        data-test="scatter-plot"
         :key="componentKey"
         :data="chartData"
         :search-type="searchType"
         :mutation-name="mutationName"
       />
       <RadarChart
+        data-test="radar-chart"
         :key="componentKey"
         :data="chartData"
         :search-type="searchType"
         :mutation-name="mutationName"
       />
       <PieChart
+        data-test="pie-chart"
         :key="componentKey"
         :data="chartData"
         :search-type="searchType"
@@ -85,12 +105,14 @@
     <!-- Display comparison charts when search type is 'Comparison' and data is fetched -->
     <template v-if="searchType === 'Comparison' && dataFetched">
       <ScatterPlot
+        data-test="scatter-plot"
         :key="componentKey"
         :data="chartData"
         :search-type="searchType"
         :mutations="mutationArray"
       />
       <BarChart
+        data-test="bar-chart"
         :key="componentKey"
         :data="chartData"
         :search-type="searchType"
@@ -112,7 +134,7 @@ import RadarChart from '../components/charts/RadarChart.vue'
 export default {
   components: {
     BarChart,
-    StackedBarChart,  
+    StackedBarChart,
     ScatterPlot,
     PieChart,
     RadarChart
