@@ -98,7 +98,7 @@ export default {
         name: this.name,
         age: this.age,
         age_at_mri: this.ageAtMRI,
-        gender: this.gender === 'true',
+        gender: this.gender,
         sudden_cardiac_death: this.suddenCardiacDeath,
         hypertension: this.hypertension,
         diabetes: this.diabetes,

@@ -156,6 +156,8 @@ const user = ref(updateUserStatus())
             const userRef = doc(collection(firebaseFireStore, 'users'), uid);
             const patientRef = doc(collection(firebaseFireStore, 'patients'), this.patient);
 
+            console.log(this.patient);
+
             const record = {
             patient: patientRef, 
             ledv: this.ledv,
@@ -167,7 +169,7 @@ const user = ref(updateUserStatus())
             resv: this.resv,
             rsv: this.rsv,
             rvef: this.rvef,
-            apicalHCM: this.apicalHCM,
+            apical_hcm: this.apicalHCM,
             actc: this.actc,
             mybpc3: this.mybpc3,
             myh7: this.myh7,
@@ -215,8 +217,11 @@ const user = ref(updateUserStatus())
         querySnapshot.forEach((doc) => {
             const name = doc.data().name ? doc.data().name : doc.id;
             const id = doc.id;
+            this.patient = id;
             ids.push({ name, id });
         });
+
+        
         this.patientList = ids;
     }
 }

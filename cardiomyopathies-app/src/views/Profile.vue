@@ -59,10 +59,14 @@
                 <button
                   @click="isPatientTableModal = !isPatientTableModal"
                   id="viewPatient"
+                  class="flex text-xs flex-row gap-4 py-4 px-4 bg-pink-400 rounded text-white justify-center items-center uppercase shadow font-bold transform duration-300 origin-center ease-in-out hover:scale-110"
                 >
+                <span class="w-28 flex justify-between items-center"><i class="fa fa-plus"></i> View Patient</span>
+
                 </button>
                 <button
                   @click="isRecordModal = !isRecordModal"
+                  class="flex text-xs flex-row gap-4 py-4 px-4 bg-indigo-400 rounded text-white justify-center items-center uppercase shadow font-bold transform duration-300 origin-center ease-in-out hover:scale-110"
                 >
                   <span class="w-28 flex justify-between items-center"><i class="fa fa-plus"></i> Add Record</span>
                 </button>
