@@ -31,7 +31,7 @@ export default {
     return {
       articles: [],
       imageUrls: [], 
-      defaultImageUrl: 'src/assets/img/defaultImage.jpg',
+      defaultImageUrl: '/img/defaultImage.jpg',
       error: false
     }
   },

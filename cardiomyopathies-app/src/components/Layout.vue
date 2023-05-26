@@ -41,7 +41,7 @@
             </div>
               <div class=" h-full mx-auto flex justify-center items-center">
               <span class="text-slate-600 font-extrabold text-lg lg:text-4xl tracking-tight -mr-3 lg:-mr-4">GR</span>
-              <img class="h-3/5 lg:h-3/4" src="../assets/img/heartlogo.png"/>
+              <img class="h-3/5 lg:h-3/4" src="/img/heartlogo.png"/>
               <span class="text-slate-600 font-extrabold text-lg lg:text-4xl tracking-tight -ml-3 lg:-ml-4">PH</span>
             </div>
           </header>
