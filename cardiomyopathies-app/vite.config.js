@@ -7,7 +7,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: '/Cardiomyopathies/',
   assetsDir: 'assets',
-  assetPrefix: '/Cardiomyopathies/assets/',
+  assetPrefix: '/assets/',
   plugins: [vue()],
   resolve: {
     alias: {
